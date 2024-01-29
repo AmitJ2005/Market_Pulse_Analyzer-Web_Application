@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Add some basic styling for better appearance */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #searchContainer {
+      position: relative;
+      display: inline-block;
+    }
+    #searchInput {
+      padding: 5px;
+      padding-right: 25px; /* Make space for the cancel symbol */
+    }
+    #cancelButton {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    #suggestionList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #suggestionList li {
+      cursor: pointer;
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
+  <title>Stock Search</title>
+</head>
+<body>
+
+  <h2>Stock Search</h2>
+
+  <div id="searchContainer">
+    <input type="text" id="searchInput" placeholder="Enter stock name">
+    <div id="cancelButton">&#10006;</div>
+  </div>
+  <ul id="suggestionList"></ul>
+
+  <script>
+    // Variable to store stock names
+    var stocks = [];
+
+    // Function to load stock names from a JSON file
+    function loadStocks() {
+      // Replace 'stock_names.json' with the actual path to your JSON file
+      fetch('stock_names.json')
+        .then(response => response.json())
+        .then(data => {
+          stocks = data;
+        })
+        .catch(error => console.error('Error loading stocks:', error));
+    }
+
+    // Function to submit the selected stock to the Flask server
+    function submitSelectedStock(selectedStock) {
+      // Use AJAX to send the selected stock to the Flask server
+      fetch('/submit_selected_stock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ selectedStock: selectedStock }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Selected stock submitted successfully.');
+        })
+        .catch(error => console.error('Error submitting selected stock:', error));
+    }
+
+    // Function to display filtered stock suggestions
+    function displayStockSuggestions(searchTerm) {
+      var suggestionList = document.getElementById('suggestionList');
+
+      // Clear the existing suggestions
+      suggestionList.innerHTML = '';
+
+      // Filter stocks based on the search term
+      var filteredStocks = stocks.filter(function(stock) {
+        return stock.toLowerCase().includes(searchTerm);
+      });
+
+      // Create list items for each filtered stock
+      filteredStocks.forEach(function(stock) {
+        var listItem = document.createElement('li');
+        listItem.textContent = stock;
+        listItem.addEventListener('click', function() {
+          // Fill the input field with the selected suggestion
+          document.getElementById('searchInput').value = stock;
+          // Submit the selected stock to the Flask server
+          submitSelectedStock(stock);
+          // Clear the suggestion list
+          suggestionList.innerHTML = '';
+        });
+        suggestionList.appendChild(listItem);
+      });
+    }
+
+    // Event listener for input changes
+    document.getElementById('searchInput').addEventListener('input', function() {
+      // Get the input value and convert it to lowercase for case-insensitive search
+      var searchTerm = this.value.toLowerCase();
+
+      // Display filtered stock suggestions
+      displayStockSuggestions(searchTerm);
+    });
+
+    // Event listener for cancel button click
+    document.getElementById('cancelButton').addEventListener('click', function() {
+      // Clear the input field
+      document.getElementById('searchInput').value = '';
+      // Clear the suggestion list
+      document.getElementById('suggestionList').innerHTML = '';
+    });
+
+    // Call the function to load stock names when the page loads
+    window.onload = loadStocks;
+  </script>
+
+</body>
+</html>
