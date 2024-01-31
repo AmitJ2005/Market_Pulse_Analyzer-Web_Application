@@ -3,58 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
-    /* Add some basic styling for better appearance */
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+      background-color: #f2f2f2;
     }
+
     #searchContainer {
-      position: relative;
+      position: absolute;
+      top: 30px;
+      right: 180px;
       display: inline-block;
     }
+
     #searchInput {
-      padding: 5px;
-      padding-right: 25px; /* Make space for the cancel symbol */
+      padding: 15px;
+      padding-right: 50px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      width: 250px;
+      outline: none;
+      transition: width 0.4s ease-in-out;
     }
+
+    #searchInput:focus {
+      width: 350px;
+    }
+
     #cancelButton {
       position: absolute;
-      right: 5px;
+      right: 20px;
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
     }
+
+    #searchContainer:hover #cancelButton,
+    #searchInput:focus + #cancelButton,
+    #searchInput:not(:placeholder-shown) + #cancelButton {
+      opacity: 1;
+    }
+
     #suggestionList {
       list-style: none;
       padding: 0;
       margin: 0;
+      position: absolute;
+      width: 410px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      z-index: 1;
+      overflow-y: auto;
+      max-height: 200px;
+      opacity: 0;
+      transform-origin: top;
+      transform: scaleY(0);
+      transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+      scrollbar-width: thin;
     }
+
+    #suggestionList::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    #suggestionList::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 5px;
+    }
+
+    #suggestionList.show {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
     #suggestionList li {
       cursor: pointer;
-      padding: 5px;
-      border: 1px solid #ccc;
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
+      transition: background-color 0.3s ease;
+    }
+
+    #suggestionList li:hover {
+      background-color: #f2f2f2;
     }
   </style>
+
   <title>Stock Search</title>
 </head>
 <body>
 
-  <h2>Stock Search</h2>
-
   <div id="searchContainer">
     <input type="text" id="searchInput" placeholder="Enter stock name">
     <div id="cancelButton">&#10006;</div>
+    <ul id="suggestionList"></ul>
   </div>
-  <ul id="suggestionList"></ul>
 
   <script>
-    // Variable to store stock names
     var stocks = [];
 
-    // Function to load stock names from a JSON file
     function loadStocks() {
-      // Replace 'stock_names.json' with the actual path to your JSON file
-      fetch('stock_names.json')
+      fetch('/stock_names.json')
         .then(response => response.json())
         .then(data => {
           stocks = data;
@@ -62,13 +120,11 @@
         .catch(error => console.error('Error loading stocks:', error));
     }
 
-    // Function to submit the selected stock to the Flask server
     function submitSelectedStock(selectedStock) {
-      // Use AJAX to send the selected stock to the Flask server
       fetch('/submit_selected_stock', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ selectedStock: selectedStock }),
       })
@@ -79,54 +135,55 @@
         .catch(error => console.error('Error submitting selected stock:', error));
     }
 
-    // Function to display filtered stock suggestions
     function displayStockSuggestions(searchTerm) {
       var suggestionList = document.getElementById('suggestionList');
-
-      // Clear the existing suggestions
       suggestionList.innerHTML = '';
 
-      // Filter stocks based on the search term
       var filteredStocks = stocks.filter(function(stock) {
         return stock.toLowerCase().includes(searchTerm);
       });
 
-      // Create list items for each filtered stock
       filteredStocks.forEach(function(stock) {
         var listItem = document.createElement('li');
         listItem.textContent = stock;
         listItem.addEventListener('click', function() {
-          // Fill the input field with the selected suggestion
           document.getElementById('searchInput').value = stock;
-          // Submit the selected stock to the Flask server
           submitSelectedStock(stock);
-          // Clear the suggestion list
           suggestionList.innerHTML = '';
         });
         suggestionList.appendChild(listItem);
       });
+
+      suggestionList.classList.toggle('show', searchTerm !== '');
     }
 
-    // Event listener for input changes
     document.getElementById('searchInput').addEventListener('input', function() {
-      // Get the input value and convert it to lowercase for case-insensitive search
       var searchTerm = this.value.toLowerCase();
-
-      // Display filtered stock suggestions
       displayStockSuggestions(searchTerm);
     });
 
-    // Event listener for cancel button click
     document.getElementById('cancelButton').addEventListener('click', function() {
-      // Clear the input field
-      document.getElementById('searchInput').value = '';
-      // Clear the suggestion list
-      document.getElementById('suggestionList').innerHTML = '';
+      var searchInput = document.getElementById('searchInput');
+      searchInput.value = '';
+      searchInput.focus();  // Keep focus after clearing
+      document.getElementById('suggestionList').classList.remove('show');
     });
 
-    // Call the function to load stock names when the page loads
+    document.getElementById('searchInput').addEventListener('focus', function() {
+      // Expand the search bar when focused
+      this.style.width = '350px';
+    });
+
+    document.getElementById('searchInput').addEventListener('blur', function() {
+      // Collapse the search bar when blurred if it's empty
+      if (this.value.trim() === '') {
+        this.style.width = '250px';
+      }
+    });
+
     window.onload = loadStocks;
   </script>
+
 
 </body>
 </html>
