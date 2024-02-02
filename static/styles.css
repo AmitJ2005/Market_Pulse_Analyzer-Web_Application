@@ -1,0 +1,89 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  background-color: #f2f2f2;
+}
+
+#searchContainer {
+  position: relative;
+  display: inline-block;
+}
+
+#searchInput {
+  padding: 15px;
+  padding-right: 50px;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  width: 250px;
+  outline: none;
+  transition: width 0.4s ease-in-out;
+}
+
+#searchInput:focus {
+  width: 350px;
+}
+
+#cancelButton {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+#searchContainer:hover #cancelButton,
+#searchInput:focus + #cancelButton,
+#searchInput:not(:placeholder-shown) + #cancelButton {
+  opacity: 1;
+}
+
+#suggestionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 410px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1;
+  overflow-y: auto;
+  max-height: 200px;
+  opacity: 0;
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  scrollbar-width: thin;
+}
+
+#suggestionList::-webkit-scrollbar {
+  width: 10px;
+}
+
+#suggestionList::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+#suggestionList.show {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+#suggestionList li {
+  cursor: pointer;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+  transition: background-color 0.3s ease;
+}
+
+#suggestionList li:hover {
+  background-color: #f2f2f2;
+}
