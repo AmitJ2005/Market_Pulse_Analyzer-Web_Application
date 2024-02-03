@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Table</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         table {
             border-collapse: collapse;
@@ -21,6 +22,9 @@
     </style>
 </head>
 <body>
+
+<h1>Details for {{ selected_stock }}</h1>
+
     <h2>Data Table - Top 5 Rows</h2>
     <table>
         <thead>
@@ -60,5 +64,10 @@
             {% endfor %}
         </tbody>
     </table>
+
+<div>
+    <img src="data:image/png;base64,{{ plot_base64 }}" alt="Same Month for Every Year Plot">
+</div>
+
 </body>
 </html>

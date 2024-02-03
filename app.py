@@ -1,7 +1,14 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
-from yahooquery import search
-import yfinance as yf
 import pandas as pd
+import yfinance as yf
+import matplotlib.pyplot as plt
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
+from yahooquery import search
+import plotly.express as px
+import io
+import base64
+
+# Rest of your code...
+
 
 app = Flask(__name__)
 
@@ -71,6 +78,7 @@ def submit_selected_stock():
             df['Day'] = df.index.day
             df['Month'] = df.index.month
             df['Year'] = df.index.year
+            df = df.round(2)
 
             # Display the historical data
             print(df.head(10))
@@ -92,6 +100,71 @@ def display_data():
     print("Displaying df:")
     print(df.head())
     return render_template('result.html', df=df)
+
+# Visualization route to generate and display plots
+@app.route('/visualize_data')
+def visualize_data():
+    global df
+
+    # Visualization logic using Plotly Express
+    fig = px.line(df, x=df.index, y='Close', title='Stock Closing Prices Over Time')
+    # You can customize the plot further based on your requirements
+
+    # Save the Plotly plot as an HTML string
+    plot_html = fig.to_html(full_html=False)
+
+    # Assuming 'data' is your DataFrame, and 'target_month' is the month you want to analyze
+    target_month = 2
+
+    # Collect data in a list
+    result_data = []
+
+    for year in df.index.year.unique():
+        target_data = df[(df.index.year == year) & (df.index.month == target_month)]
+
+        if not target_data.empty:
+            first_day_high = target_data.iloc[0]['Open']
+            last_day_low = target_data.iloc[-1]['Close']
+
+            result_data.append({
+                'Year': year,
+                'First_High': first_day_high,
+                'Last_Low': last_day_low,
+                'Month_range': last_day_low - first_day_high,
+                'Direction': 'Positive' if (last_day_low - first_day_high) > 0 else 'Negative',
+                '-%-Change': f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
+            })
+
+    # Create DataFrame from the list
+    result_df = pd.DataFrame(result_data, columns=['Year', 'First_High', 'Last_Low', 'Month_range', 'Direction','- %-Change'])
+
+    # Count the occurrences of each unique value in the 'Direction' column
+    direction_counts = result_df['Direction'].value_counts()
+
+    # Define colors for positive and negative values
+    colors = ['red' if label == 'Negative' else 'green' for label in direction_counts.index]
+
+    # Plotting the bar plot with specified colors
+    plt.bar(direction_counts.index, direction_counts.values, color=colors)
+
+    # Adding labels and title
+    plt.xlabel('Status')
+    plt.ylabel('Count')
+    plt.title('Same Month for Every Year - Positive or Negative index')
+
+    # Save the plot to a BytesIO object
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    # Encode the plot as base64 for embedding in HTML
+    plot_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+
+    # Close the buffer
+    buffer.close()
+
+    # Pass both the Plotly plot and Matplotlib plot to the HTML template
+    return render_template('result.html', df=df, plot_html=plot_html, plot_base64=plot_base64)
 
 
 if __name__ == '__main__':
