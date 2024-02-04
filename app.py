@@ -167,6 +167,8 @@ def visualize_data():
     return render_template('result.html', df=df, plot_html=plot_html, plot_base64=plot_base64)
 
 
+
+
 if __name__ == '__main__':
     # Run the Flask app with debug mode
     app.run(debug=True)
