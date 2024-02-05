@@ -27,48 +27,6 @@
 </head>
 <body>
 
-<h1>Data Visualization for {{ selected_stock }}</h1>
-
-<h2>Data Table - Top 5 Rows</h2>
-<table>
-    <thead>
-        <tr>
-            {% for col in df.columns %}
-                <th>{{ col }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for index, row in df.head(5).iterrows() %}
-            <tr>
-                {% for col in df.columns %}
-                    <td>{{ row[col] }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2>Data Table - Last 5 Rows</h2>
-<table>
-    <thead>
-        <tr>
-            {% for col in df.columns %}
-                <th>{{ col }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for index, row in df.tail(5).iterrows() %}
-            <tr>
-                {% for col in df.columns %}
-                    <td>{{ row[col] }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
 <!-- Line Chart - Stock Closing Prices Over Time -->
 <div>
     {{ plot_html|safe }}
@@ -77,9 +35,54 @@
 <div>
     <!-- Display Analysis 1 Bar Plot -->
     <img src="data:image/png;base64, {{ plot_base64_same_month }}" alt="Analysis 1">
+</div>
 
+<!-- Display Analysis 1 DataFrame - Same Month for Every Year -->
+<h2>Analysis 1 DataFrame - Same Month for Every Year</h2>
+<table>
+    <thead>
+        <tr>
+            {% for col in result_df_same_month.columns %}
+                <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for index, row in result_df_same_month.iterrows() %}
+            <tr>
+                {% for col in result_df_same_month.columns %}
+                    <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<div>
     <!-- Display Analysis 2 Bar Plot -->
     <img src="data:image/png;base64, {{ plot_base64_yearly }}" alt="Analysis 2">
 </div>
+
+<!-- Display Analysis 2 DataFrame - 2005-2024 Market -->
+<h2>Analysis 2 DataFrame - 2005-2024 Market</h2>
+<table>
+    <thead>
+        <tr>
+            {% for col in result_df_yearly.columns %}
+                <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for index, row in result_df_yearly.iterrows() %}
+            <tr>
+                {% for col in result_df_yearly.columns %}
+                    <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>

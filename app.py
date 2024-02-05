@@ -82,9 +82,6 @@ def submit_selected_stock():
             df['Year'] = df.index.year
             df = df.round(2)
 
-            # Display the historical data
-            print(df.head(10))
-
         else:
             # Handle the case where no stock symbol is found
             print(f"No stock symbol found for {selected_stock}")
@@ -98,6 +95,12 @@ def submit_selected_stock():
 @app.route('/visualize_data')
 def visualize_data():
     global df
+
+    # Initialize fig outside the conditional block
+    fig = None
+
+    # Convert the index to DateTimeIndex
+    df.index = pd.to_datetime(df.index)
 
     if 'Close' in df.columns:
         fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
@@ -126,7 +129,8 @@ def visualize_data():
 
     result_df_same_month = pd.DataFrame(result_data_same_month,
                                         columns=['Year', 'First_High', 'Last_Low', 'Month_range', 'Direction',
-                                                 '- %-Change'])
+                                                 '-%-Change'])
+    result_df_same_month=result_df_same_month.round(2)
 
     # Count the occurrences of each unique value in the 'Direction' column for Analysis 1
     direction_counts_same_month = result_df_same_month['Direction'].value_counts()
@@ -178,7 +182,8 @@ def visualize_data():
                 '-%-Change': f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
             })
 
-    result_df_yearly = pd.DataFrame(result_data_yearly, columns=['Year', 'First_High', 'Last_Low', 'Year_range', 'Direction','- %-Change'])
+    result_df_yearly = pd.DataFrame(result_data_yearly, columns=['Year', 'First_High', 'Last_Low', 'Year_range', 'Direction','-%-Change'])
+    result_df_yearly=result_df_yearly.round(2)
 
     # Count the occurrences of each unique value in the 'Direction' column for Analysis 2
     direction_counts_yearly = result_df_yearly['Direction'].value_counts()
@@ -207,12 +212,19 @@ def visualize_data():
 
     plt.close('all')
 
-    # Save the Plotly plot as an HTML string for the line chart
-    plot_html = fig.to_html(full_html=False)
+    # Check if fig is None before attempting to convert to HTML
+    if fig is not None:
+        # Save the Plotly plot as an HTML string for the line chart
+        plot_html = fig.to_html(full_html=False)
 
-    # Pass the line chart and both bar plots to the HTML template
-    return render_template('result.html', df=df, plot_html=plot_html, plot_base64_same_month=plot_base64_same_month,
-                           plot_base64_yearly=plot_base64_yearly)
+        # Return the HTML template with the necessary variables
+        return render_template('result.html', df=df, plot_html=plot_html, plot_base64_same_month=plot_base64_same_month,
+                           plot_base64_yearly=plot_base64_yearly,
+                           result_df_same_month=result_df_same_month,
+                           result_df_yearly=result_df_yearly)
+    else:
+        # Return a message or handle the case where 'Close' column is not found
+        return render_template('result.html', df=df, error_message="Close column not found in DataFrame")
 
 
 if __name__ == '__main__':
