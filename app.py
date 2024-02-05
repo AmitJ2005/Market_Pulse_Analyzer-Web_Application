@@ -1,5 +1,7 @@
 import pandas as pd
 import yfinance as yf
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 from yahooquery import search
@@ -92,32 +94,19 @@ def submit_selected_stock():
     # You can send a response back to the frontend if needed
     return jsonify({'message': 'Selected stock received successfully'})
 
-# New route to display the DataFrame as an HTML table
-@app.route('/display_data')
-def display_data():
-    global df  # Assuming df is your DataFrame
-    # Debug prints to check if df is loaded properly
-    print("Displaying df:")
-    print(df.head())
-    return render_template('result.html', df=df)
-
 # Visualization route to generate and display plots
 @app.route('/visualize_data')
 def visualize_data():
     global df
 
-    # Visualization logic using Plotly Express
-    fig = px.line(df, x=df.index, y='Close', title='Stock Closing Prices Over Time')
-    # You can customize the plot further based on your requirements
+    if 'Close' in df.columns:
+        fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
+    else:
+        print("Error: 'Close' column not found in DataFrame.")
 
-    # Save the Plotly plot as an HTML string
-    plot_html = fig.to_html(full_html=False)
-
-    # Assuming 'data' is your DataFrame, and 'target_month' is the month you want to analyze
+    # Analysis 1: Same Month for Every Year - Positive or Negative Index
     target_month = 2
-
-    # Collect data in a list
-    result_data = []
+    result_data_same_month = []
 
     for year in df.index.year.unique():
         target_data = df[(df.index.year == year) & (df.index.month == target_month)]
@@ -126,7 +115,7 @@ def visualize_data():
             first_day_high = target_data.iloc[0]['Open']
             last_day_low = target_data.iloc[-1]['Close']
 
-            result_data.append({
+            result_data_same_month.append({
                 'Year': year,
                 'First_High': first_day_high,
                 'Last_Low': last_day_low,
@@ -135,38 +124,95 @@ def visualize_data():
                 '-%-Change': f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
             })
 
-    # Create DataFrame from the list
-    result_df = pd.DataFrame(result_data, columns=['Year', 'First_High', 'Last_Low', 'Month_range', 'Direction','- %-Change'])
+    result_df_same_month = pd.DataFrame(result_data_same_month,
+                                        columns=['Year', 'First_High', 'Last_Low', 'Month_range', 'Direction',
+                                                 '- %-Change'])
 
-    # Count the occurrences of each unique value in the 'Direction' column
-    direction_counts = result_df['Direction'].value_counts()
+    # Count the occurrences of each unique value in the 'Direction' column for Analysis 1
+    direction_counts_same_month = result_df_same_month['Direction'].value_counts()
 
-    # Define colors for positive and negative values
-    colors = ['red' if label == 'Negative' else 'green' for label in direction_counts.index]
+    # Define colors for positive and negative values for Analysis 1
+    colors_same_month = ['red' if label == 'Negative' else 'green' for label in direction_counts_same_month.index]
 
-    # Plotting the bar plot with specified colors
-    plt.bar(direction_counts.index, direction_counts.values, color=colors)
+    # Plotting the bar plot with specified colors for Analysis 1
+    plt.bar(direction_counts_same_month.index, direction_counts_same_month.values, color=colors_same_month)
 
-    # Adding labels and title
+    # Adding labels and title for Analysis 1
     plt.xlabel('Status')
     plt.ylabel('Count')
-    plt.title('Same Month for Every Year - Positive or Negative index')
+    plt.title('Same Month for Every Year - Positive or Negative Index')
 
-    # Save the plot to a BytesIO object
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
+    # Save the plot to a BytesIO object for Analysis 1
+    buffer_same_month = io.BytesIO()
+    plt.savefig(buffer_same_month, format='png')
+    buffer_same_month.seek(0)
 
-    # Encode the plot as base64 for embedding in HTML
-    plot_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    # Encode the plot as base64 for embedding in HTML for Analysis 1
+    plot_base64_same_month = base64.b64encode(buffer_same_month.read()).decode('utf-8')
 
-    # Close the buffer
-    buffer.close()
+    # Close the buffer for Analysis 1
+    buffer_same_month.close()
 
-    # Pass both the Plotly plot and Matplotlib plot to the HTML template
-    return render_template('result.html', df=df, plot_html=plot_html, plot_base64=plot_base64)
+    plt.close('all')
+
+    # Save the Plotly plot as an HTML string for the line chart
+    plot_html = fig.to_html(full_html=False)
 
 
+    # Analysis 2: 2005-2024 Market - Positive or Negative Index
+    result_data_yearly = []
+
+    for year in df.index.year.unique():
+        year_data = df[df.index.year == year]
+
+        if not year_data.empty:
+            first_day_high = year_data.iloc[0]['Open']
+            last_day_low = year_data.iloc[-1]['Close']
+
+            result_data_yearly.append({
+                'Year': year,
+                'First_High': first_day_high,
+                'Last_Low': last_day_low,
+                'Year_range': last_day_low - first_day_high,
+                'Direction': 'Positive' if (last_day_low - first_day_high) > 0 else 'Negative',
+                '-%-Change': f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
+            })
+
+    result_df_yearly = pd.DataFrame(result_data_yearly, columns=['Year', 'First_High', 'Last_Low', 'Year_range', 'Direction','- %-Change'])
+
+    # Count the occurrences of each unique value in the 'Direction' column for Analysis 2
+    direction_counts_yearly = result_df_yearly['Direction'].value_counts()
+
+    # Define colors for positive and negative values for Analysis 2
+    colors_yearly = ['red' if label == 'Negative' else 'green' for label in direction_counts_yearly.index]
+
+    # Plotting the bar plot with specified colors for Analysis 2
+    plt.bar(direction_counts_yearly.index, direction_counts_yearly.values, color=colors_yearly)
+
+    # Adding labels and title for Analysis 2
+    plt.xlabel('Status')
+    plt.ylabel('Count')
+    plt.title('2005-2024 Market - Positive or Negative Index')
+
+    # Save the plot to a BytesIO object for Analysis 2
+    buffer_yearly = io.BytesIO()
+    plt.savefig(buffer_yearly, format='png')
+    buffer_yearly.seek(0)
+
+    # Encode the plot as base64 for embedding in HTML for Analysis 2
+    plot_base64_yearly = base64.b64encode(buffer_yearly.read()).decode('utf-8')
+
+    # Close the buffer for Analysis 2
+    buffer_yearly.close()
+
+    plt.close('all')
+
+    # Save the Plotly plot as an HTML string for the line chart
+    plot_html = fig.to_html(full_html=False)
+
+    # Pass the line chart and both bar plots to the HTML template
+    return render_template('result.html', df=df, plot_html=plot_html, plot_base64_same_month=plot_base64_same_month,
+                           plot_base64_yearly=plot_base64_yearly)
 
 
 if __name__ == '__main__':
