@@ -95,6 +95,7 @@ def submit_selected_stock():
 @app.route('/visualize_data')
 def visualize_data():
     global df
+    global selected_stock
 
     # Initialize fig outside the conditional block
     fig = None
@@ -221,7 +222,8 @@ def visualize_data():
         return render_template('result.html', df=df, plot_html=plot_html, plot_base64_same_month=plot_base64_same_month,
                            plot_base64_yearly=plot_base64_yearly,
                            result_df_same_month=result_df_same_month,
-                           result_df_yearly=result_df_yearly)
+                           result_df_yearly=result_df_yearly,
+                           selected_stock=selected_stock)
     else:
         # Return a message or handle the case where 'Close' column is not found
         return render_template('result.html', df=df, error_message="Close column not found in DataFrame")
