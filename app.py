@@ -30,14 +30,6 @@ def fetch_historical_data(stock_symbol):
 # Function to preprocess the data
 def preprocess_data(data):
     data = data.drop(columns=["Adj Close"])
-    data['Daily_Price_Change'] = data['Close'] - data['Open']
-    data['Daily_Price_Range'] = data['High'] - data['Low']
-    data['Day Of Week'] = data.index.day_name()
-    data['Direction'] = data.apply(lambda row: 'Positive' if (row['Open'] - row['Close']) < 0 else 'Negative', axis=1)
-    data['Percentage Change'] = data.apply(lambda row: f"{round((row['Close'] - row['Open']) / row['Open'] * 100, 1)}%", axis=1)
-    data['Day'] = data.index.day
-    data['Month'] = data.index.month
-    data['Year'] = data.index.year
     data = data.round(2)
     return data
 
@@ -127,6 +119,7 @@ def submit_selected_stock():
 def visualize_data():
     global df
     global selected_stock
+    global fig
 
     # Initialize fig outside the conditional block
     fig = None
@@ -137,7 +130,6 @@ def visualize_data():
         # Save the Plotly plot as an HTML string for the line chart
         plot_html = fig.to_html(full_html=False)
 
-    if fig is not None:
         # Analysis 1: Same Month for Every Year - Positive or Negative Index
         result_data_same_month = []
         for year in df.index.year.unique():

@@ -35,7 +35,9 @@ function displayStockSuggestions(searchTerm) {
 
   // Filter stocks based on search term
   var filteredStocks = stocks.filter(function(stock) {
-    return stock.toLowerCase().includes(searchTerm);
+    // Check if the stock name or any part of it matches the search term
+    return stock.toLowerCase().includes(searchTerm) ||
+           stock.toLowerCase().includes(searchTerm + ' '); // Check for numbers appended after the stock name
   });
 
   // Create list items for filtered stocks and add click event listener
