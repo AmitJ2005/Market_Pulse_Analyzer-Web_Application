@@ -1,4 +1,3 @@
-// Define an array to store stock names
 var stocks = [];
 
 // Function to load stock names from server
