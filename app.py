@@ -14,6 +14,8 @@ app = Flask(__name__)
 # Global variables to store the DataFrame and selected stock
 df = pd.DataFrame()
 selected_stock = ''
+result_df_same_month = None
+result_df_yearly = None
 
 # Function to fetch historical data using yfinance
 def fetch_historical_data(stock_symbol):
@@ -119,7 +121,6 @@ def submit_selected_stock():
 def visualize_data():
     global df
     global selected_stock
-    global fig
 
     # Initialize fig outside the conditional block
     fig = None
