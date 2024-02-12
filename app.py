@@ -116,76 +116,79 @@ def submit_selected_stock():
 
     return jsonify({'message': 'Selected stock received successfully'})
 
+
 # Visualization route to generate and display plots
 @app.route('/visualize_data')
 def visualize_data():
     global df
     global selected_stock
+    global result_df_same_month
+    global result_df_yearly
+
+    # Check if 'Close' column exists in DataFrame
+    if 'Close' not in df.columns:
+        return render_template('result.html', error_message="Close column not found in DataFrame")
 
     # Initialize fig outside the conditional block
-    fig = None
+    fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
 
-    if 'Close' in df.columns:
-        fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
+    # Save the Plotly plot as an HTML string for the line chart
+    plot_html = fig.to_html(full_html=False)
 
-        # Save the Plotly plot as an HTML string for the line chart
-        plot_html = fig.to_html(full_html=False)
+    # Analysis 1: Same Month for Every Year - Positive or Negative Index
+    result_data_same_month = []
+    for year in df.index.year.unique():
+        target_data = df[(df.index.year == year) & (df.index.month == 2)]
+        if not target_data.empty:
+            first_day_high = target_data.iloc[0]['Open']
+            last_day_low = target_data.iloc[-1]['Close']
+            month_range = last_day_low - first_day_high
+            direction = 'Positive' if month_range > 0 else 'Negative'
+            percent_change = f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
+            result_data_same_month.append({
+                'Year': year,
+                'High': first_day_high,
+                'Low': last_day_low,
+                'Month_range': month_range,
+                'Direction': direction,
+                '%-Change': percent_change
+            })
+    result_df_same_month = pd.DataFrame(result_data_same_month,
+                                        columns=['Year', 'High', 'Low', 'Month_range', 'Direction', '%-Change'])
+    result_df_same_month = result_df_same_month.round(2)
 
-        # Analysis 1: Same Month for Every Year - Positive or Negative Index
-        result_data_same_month = []
-        for year in df.index.year.unique():
-            target_data = df[(df.index.year == year) & (df.index.month == 2)]
-            if not target_data.empty:
-                first_day_high = target_data.iloc[0]['Open']
-                last_day_low = target_data.iloc[-1]['Close']
-                month_range = last_day_low - first_day_high
-                direction = 'Positive' if month_range > 0 else 'Negative'
-                percent_change = f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
-                result_data_same_month.append({
-                    'Year': year,
-                    'High': first_day_high,
-                    'Low': last_day_low,
-                    'Month_range': month_range,
-                    'Direction': direction,
-                    '%-Change': percent_change
-                })
-        result_df_same_month = pd.DataFrame(result_data_same_month,
-                                            columns=['Year', 'High', 'Low', 'Month_range', 'Direction', '%-Change'])
-        result_df_same_month = result_df_same_month.round(2)
+    # Generate bar plot for Analysis 1
+    plot_base64_same_month = generate_bar_plot(result_df_same_month, 'Same Month for Every Year - Positive or Negative Index')
 
-        # Generate bar plot for Analysis 1
-        plot_base64_same_month = generate_bar_plot(result_df_same_month, 'Same Month for Every Year - Positive or Negative Index')
+    # Analysis 2: 2005-2024 Market - Positive or Negative Index
+    result_data_yearly = []
+    for year in df.index.year.unique():
+        year_data = df[df.index.year == year]
+        if not year_data.empty:
+            first_day_high = year_data.iloc[0]['Open']
+            last_day_low = year_data.iloc[-1]['Close']
+            year_range = last_day_low - first_day_high
+            direction = 'Positive' if year_range > 0 else 'Negative'
+            percent_change = f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
+            result_data_yearly.append({
+                'Year': year,
+                'High': first_day_high,
+                'Low': last_day_low,
+                'Year_range': year_range,
+                'Direction': direction,
+                '%-Change': percent_change
+            })
+    result_df_yearly = pd.DataFrame(result_data_yearly,
+                                    columns=['Year', 'High', 'Low', 'Year_range', 'Direction', '%-Change'])
+    result_df_yearly = result_df_yearly.round(2)
 
-        # Analysis 2: 2005-2024 Market - Positive or Negative Index
-        result_data_yearly = []
-        for year in df.index.year.unique():
-            year_data = df[df.index.year == year]
-            if not year_data.empty:
-                first_day_high = year_data.iloc[0]['Open']
-                last_day_low = year_data.iloc[-1]['Close']
-                year_range = last_day_low - first_day_high
-                direction = 'Positive' if year_range > 0 else 'Negative'
-                percent_change = f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
-                result_data_yearly.append({
-                    'Year': year,
-                    'High': first_day_high,
-                    'Low': last_day_low,
-                    'Year_range': year_range,
-                    'Direction': direction,
-                    '%-Change': percent_change
-                })
-        result_df_yearly = pd.DataFrame(result_data_yearly,
-                                        columns=['Year', 'High', 'Low', 'Year_range', 'Direction', '%-Change'])
-        result_df_yearly = result_df_yearly.round(2)
+    # Generate bar plot for Analysis 2
+    plot_base64_yearly = generate_bar_plot(result_df_yearly, '2005-2024 Market - Positive or Negative Index')
 
-        # Generate bar plot for Analysis 2
-        plot_base64_yearly = generate_bar_plot(result_df_yearly, '2005-2024 Market - Positive or Negative Index')
+    return render_template('result.html', df=df, plot_html=plot_html, result_df_same_month=result_df_same_month,
+                           result_df_yearly=result_df_yearly, plot_base64_same_month=plot_base64_same_month,
+                           plot_base64_yearly=plot_base64_yearly, selected_stock=selected_stock)
 
-        return render_template('result.html', df=df, plot_html=plot_html, result_df_same_month=result_df_same_month,
-                               result_df_yearly=result_df_yearly, plot_base64_same_month=plot_base64_same_month,
-                               plot_base64_yearly=plot_base64_yearly, selected_stock=selected_stock)
-    else:
-        return render_template('result.html', error_message="Close column not found in DataFrame")
 
 if __name__ == '__main__':
     app.run(debug=True)
