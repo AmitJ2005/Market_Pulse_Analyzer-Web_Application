@@ -1,3 +1,41 @@
+// Variable to store the Typed.js instance
+var typedInstance;
+
+// Function to initialize the typing animation for the placeholder text
+function initPlaceholderTyping() {
+  var placeholderElement = document.getElementById('searchInput').getAttribute('placeholder');
+  typedInstance = new Typed("#searchInput", {
+    strings: ["Data Scientist ", "Machine Learning Engineer ", "Database Administrator ", "Business Analyst ", "Data Engineers"], // Use the placeholder text as the string
+    typeSpeed: 50,
+    backSpeed: 30,
+    loop: true,
+    showCursor: false,
+  });
+}
+
+// Call the function to initialize the typing animation
+initPlaceholderTyping();
+
+// Function to handle input field focus
+function handleInputFieldFocus() {
+  // Stop the typing animation when the input field gains focus
+  if (typedInstance) {
+    typedInstance.destroy();
+  }
+}
+
+// Attach event listener for input field focus
+document.getElementById('searchInput').addEventListener('focus', handleInputFieldFocus);
+
+// Function to handle input field blur
+function handleInputFieldBlur() {
+  // Reinitialize the typing animation when the input field loses focus
+  initPlaceholderTyping();
+}
+
+// Attach event listener for input field blur
+document.getElementById('searchInput').addEventListener('blur', handleInputFieldBlur);
+
 var stocks = [];
 
 // Function to load stock names from server
