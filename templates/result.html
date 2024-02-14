@@ -3,118 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <title>Data Visualization</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center; /* Align items vertically */
-            margin-bottom: 20px;
-        }
-        .container > div {
-            flex: 0 0 auto; /* Let the items shrink to fit content */
-        }
-        .analysis-container {
-            width: 50%; /* Set width for the container to make image and table same width */
-            margin: 0 auto; /* Center align the content */
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 20px;
-            overflow-x: auto; /* Enable horizontal scroll */
-            display: block; /* Enable vertical scroll */
-            max-height: 400px; /* Set maximum height for vertical scroll */
-            vertical-align: top; /* Align table content to the top */
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-            white-space: nowrap; /* Prevent line breaks in table cells */
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block; /* Ensure the image is displayed as a block */
-            margin: 0 auto; /* Center align the image */
-        }
-        .scrollable-table {
-            overflow-x: auto;
-            max-height: 450px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
 </head>
 <body>
+    <header>
+        <!-- Search container -->
+        <div id="searchContainer">
+            <input type="text" id="searchInput" placeholder="Enter stock name">
+            <div id="cancelButton">&#10006;</div>
+            <ul id="suggestionList"></ul>
+        </div>
+    </header>
 
-<h1>Selected Stock: {{ selected_stock }}</h1>
+    <h1>Selected Stock: {{ selected_stock }}</h1>
 
-<!-- Line Chart - Stock Closing Prices Over Time -->
-<div>
-    {{ plot_html|safe }}
-</div>
-
-<!-- Display Analysis 1 DataFrame - Same Month for Every Year -->
-<div class="container">
-    <div class="analysis-container">
-        <!-- Display Analysis 1 Bar Plot -->
-        <img src="data:image/png;base64, {{ plot_base64_same_month }}" alt="Analysis 1">
+    <!-- Line Chart - Stock Closing Prices Over Time -->
+    <div>
+        {{ plot_html|safe }}
     </div>
-    <div class="analysis-container scrollable-table">
-        <table>
-            <thead>
-                <tr>
-                    {% for col in result_df_same_month.columns %}
-                        <th>{{ col }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for index, row in result_df_same_month.iterrows() %}
+
+    <!-- Display Analysis 1 DataFrame - Same Month for Every Year -->
+    <div class="container">
+        <div class="analysis-container">
+            <!-- Display Analysis 1 Bar Plot -->
+            <img src="data:image/png;base64, {{ plot_base64_same_month }}" alt="Analysis 1">
+        </div>
+        <div class="analysis-container scrollable-table">
+            <table>
+                <thead>
                     <tr>
                         {% for col in result_df_same_month.columns %}
-                            <td>{{ row[col] }}</td>
+                            <th>{{ col }}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-<!-- Display Analysis 2 DataFrame - 2005-2024 Market -->
-<div class="container">
-    <div class="analysis-container">
-        <!-- Display Analysis 2 Bar Plot -->
-        <img src="data:image/png;base64, {{ plot_base64_yearly }}" alt="Analysis 2">
-    </div>
-    <div class="analysis-container scrollable-table">
-        <table>
-            <thead>
-                <tr>
-                    {% for col in result_df_yearly.columns %}
-                        <th>{{ col }}</th>
+                </thead>
+                <tbody>
+                    {% for index, row in result_df_same_month.iterrows() %}
+                        <tr>
+                            {% for col in result_df_same_month.columns %}
+                                <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
                     {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for index, row in result_df_yearly.iterrows() %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Display Analysis 2 DataFrame - 2005-2024 Market -->
+    <div class="container">
+        <div class="analysis-container">
+            <!-- Display Analysis 2 Bar Plot -->
+            <img src="data:image/png;base64, {{ plot_base64_yearly }}" alt="Analysis 2">
+        </div>
+        <div class="analysis-container scrollable-table">
+            <table>
+                <thead>
                     <tr>
                         {% for col in result_df_yearly.columns %}
-                            <td>{{ row[col] }}</td>
+                            <th>{{ col }}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for index, row in result_df_yearly.iterrows() %}
+                        <tr>
+                            {% for col in result_df_yearly.columns %}
+                                <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

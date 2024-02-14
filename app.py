@@ -10,7 +10,6 @@ import io
 import base64
 
 app = Flask(__name__)
-
 # Global variables to store the DataFrame and selected stock
 df = pd.DataFrame()
 selected_stock = ''
@@ -151,10 +150,10 @@ def visualize_data():
                 'Low': last_day_low,
                 'Month_range': month_range,
                 'Direction': direction,
-                '%-Change': percent_change
+                'Returns': percent_change
             })
     result_df_same_month = pd.DataFrame(result_data_same_month,
-                                        columns=['Year', 'High', 'Low', 'Month_range', 'Direction', '%-Change'])
+                                        columns=['Year', 'High', 'Low', 'Month_range', 'Direction', 'Returns'])
     result_df_same_month = result_df_same_month.round(2)
 
     # Generate bar plot for Analysis 1
@@ -176,10 +175,10 @@ def visualize_data():
                 'Low': last_day_low,
                 'Year_range': year_range,
                 'Direction': direction,
-                '%-Change': percent_change
+                'Returns': percent_change
             })
     result_df_yearly = pd.DataFrame(result_data_yearly,
-                                    columns=['Year', 'High', 'Low', 'Year_range', 'Direction', '%-Change'])
+                                    columns=['Year', 'High', 'Low', 'Year_range', 'Direction', 'Returns'])
     result_df_yearly = result_df_yearly.round(2)
 
     # Generate bar plot for Analysis 2

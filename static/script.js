@@ -5,9 +5,9 @@ var typedInstance;
 function initPlaceholderTyping() {
   var placeholderElement = document.getElementById('searchInput').getAttribute('placeholder');
   typedInstance = new Typed("#searchInput", {
-    strings: ["Data Scientist ", "Machine Learning Engineer ", "Database Administrator ", "Business Analyst ", "Data Engineers"], // Use the placeholder text as the string
+    strings: ["Enter stock name"," Reliance Industries ", " Tata Consultancy Services ", " HDFC Bank ", " State Bank of India ", " Bajaj Finance ", " Hindustan Unilever", " Berger Paints India "], // Use the placeholder text as the string
     typeSpeed: 50,
-    backSpeed: 30,
+    backSpeed: 40,
     loop: true,
     showCursor: false,
   });
@@ -16,12 +16,17 @@ function initPlaceholderTyping() {
 // Call the function to initialize the typing animation
 initPlaceholderTyping();
 
-// Function to handle input field focus
-function handleInputFieldFocus() {
-  // Stop the typing animation when the input field gains focus
+// Function to stop the typing animation
+function stopTypingAnimation() {
   if (typedInstance) {
     typedInstance.destroy();
   }
+}
+
+// Function to handle input field focus
+function handleInputFieldFocus() {
+  // Stop the typing animation when the input field gains focus
+  stopTypingAnimation();
 }
 
 // Attach event listener for input field focus
@@ -66,6 +71,7 @@ function submitSelectedStock(selectedStock) {
 }
 
 // Function to display stock suggestions based on user input
+// Function to display stock suggestions based on user input
 function displayStockSuggestions(searchTerm) {
   var suggestionList = document.getElementById('suggestionList');
   suggestionList.innerHTML = ''; // Clear previous suggestions
@@ -82,6 +88,9 @@ function displayStockSuggestions(searchTerm) {
     var listItem = document.createElement('li');
     listItem.textContent = stock;
     listItem.addEventListener('click', function() {
+      var searchInput = document.getElementById('searchInput');
+      searchInput.value = stock; // Set input value to selected stock
+      stopTypingAnimation(); // Stop typing animation
       document.getElementById('searchInput').value = stock; // Set input value to selected stock
       submitSelectedStock(stock); // Submit selected stock to server
       suggestionList.classList.remove('show'); // Hide suggestion list
@@ -92,6 +101,13 @@ function displayStockSuggestions(searchTerm) {
   // Show suggestion list if search term is not empty
   suggestionList.classList.toggle('show', searchTerm !== '');
 }
+
+// Function to handle input event in search input field
+document.getElementById('searchInput').addEventListener('input', function() {
+  var searchTerm = this.value.toLowerCase(); // Get input value and convert to lowercase
+  displayStockSuggestions(searchTerm); // Display stock suggestions based on input value
+});
+
 
 // Function to handle cancel button click event
 document.getElementById('cancelButton').addEventListener('click', function() {
