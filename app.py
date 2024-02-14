@@ -16,6 +16,7 @@ selected_stock = ''
 result_df_same_month = None
 result_df_yearly = None
 
+
 # Function to fetch historical data using yfinance
 def fetch_historical_data(stock_symbol):
     try:
@@ -28,11 +29,13 @@ def fetch_historical_data(stock_symbol):
         print(f"Error fetching historical data for {stock_symbol}: {e}")
         return None
 
+
 # Function to preprocess the data
 def preprocess_data(data):
     data = data.drop(columns=["Adj Close"])
     data = data.round(2)
     return data
+
 
 # Function to handle fetching and preprocessing data for selected stock
 def handle_selected_stock(selected_stock):
@@ -41,14 +44,11 @@ def handle_selected_stock(selected_stock):
     # Fetch stock symbol based on the selected stock
     try:
         result = search(selected_stock)
-
         if result['quotes']:
             stock_symbol = result['quotes'][0]['symbol']
             print(f"Stock symbol for {selected_stock}: {stock_symbol}")
-
             # Fetch historical data
             df = fetch_historical_data(stock_symbol)
-
             if df is not None:
                 # Preprocess the data
                 df = preprocess_data(df)
@@ -59,37 +59,31 @@ def handle_selected_stock(selected_stock):
     except Exception as e:
         print(f"Error fetching stock symbol for {selected_stock}: {e}")
 
+
 # Function to generate bar plot and return base64 encoded image
 def generate_bar_plot(data, title):
     # Count the occurrences of each unique value in the 'Direction' column
     direction_counts = data['Direction'].value_counts()
-
     # Define colors for positive and negative values
     colors = ['red' if label == 'Negative' else 'green' for label in direction_counts.index]
-
     # Plotting the bar plot with specified colors
     plt.bar(direction_counts.index, direction_counts.values, color=colors)
-
     # Adding labels and title
     plt.xlabel('Status')
     plt.ylabel('Count')
     plt.title(title)
-
     # Save the plot to a BytesIO object
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-
     # Encode the plot as base64
     plot_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-
     # Close the buffer
     buffer.close()
-
     # Close the plot to free memory
     plt.close()
-
     return plot_base64
+
 
 # Route to serve the HTML page
 @app.route('/')
@@ -97,22 +91,21 @@ def index():
     print("Rendering index.html")
     return render_template('index.html')
 
+
 @app.route('/stock_names.json')
 def get_stock_names():
     # Logic to read and return stock_names.json
     return send_from_directory(app.root_path, 'stock_names.json')
 
+
 # Route to handle the selected stock and fetch historical data
 @app.route('/submit_selected_stock', methods=['POST'])
 def submit_selected_stock():
     global selected_stock
-
     data = request.get_json()
     selected_stock = data.get('selectedStock', '')
-
     # Handle selected stock
     handle_selected_stock(selected_stock)
-
     return jsonify({'message': 'Selected stock received successfully'})
 
 
@@ -123,17 +116,13 @@ def visualize_data():
     global selected_stock
     global result_df_same_month
     global result_df_yearly
-
     # Check if 'Close' column exists in DataFrame
     if 'Close' not in df.columns:
         return render_template('result.html', error_message="Close column not found in DataFrame")
-
     # Initialize fig outside the conditional block
     fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
-
     # Save the Plotly plot as an HTML string for the line chart
     plot_html = fig.to_html(full_html=False)
-
     # Analysis 1: Same Month for Every Year - Positive or Negative Index
     result_data_same_month = []
     for year in df.index.year.unique():
@@ -158,7 +147,6 @@ def visualize_data():
 
     # Generate bar plot for Analysis 1
     plot_base64_same_month = generate_bar_plot(result_df_same_month, 'Same Month for Every Year - Positive or Negative Index')
-
     # Analysis 2: 2005-2024 Market - Positive or Negative Index
     result_data_yearly = []
     for year in df.index.year.unique():
@@ -183,7 +171,6 @@ def visualize_data():
 
     # Generate bar plot for Analysis 2
     plot_base64_yearly = generate_bar_plot(result_df_yearly, '2005-2024 Market - Positive or Negative Index')
-
     return render_template('result.html', df=df, plot_html=plot_html, result_df_same_month=result_df_same_month,
                            result_df_yearly=result_df_yearly, plot_base64_same_month=plot_base64_same_month,
                            plot_base64_yearly=plot_base64_yearly, selected_stock=selected_stock)
