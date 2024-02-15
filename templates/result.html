@@ -9,13 +9,24 @@
 </head>
 <body>
     <header>
-        <!-- Search container -->
-        <div id="searchContainer">
-            <input type="text" id="searchInput" >
-            <div id="cancelButton">&#10006;</div>
-            <ul id="suggestionList"></ul>
-        </div>
-    </header>
+    <!-- Logo -->
+    <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
+
+    <!-- Search container -->
+    <div id="searchContainer">
+        <input type="text" id="searchInput">
+        <div id="cancelButton">&#10006;</div>
+        <ul id="suggestionList"></ul>
+    </div>
+
+    <!-- Navigation links -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+</header>
 
     <h1>Selected Stock: {{ selected_stock }}</h1>
 

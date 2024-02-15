@@ -1,5 +1,4 @@
 /* Styles for the search bar */
-
 #searchContainer {
   position: relative;
   display: inline-block;
@@ -7,8 +6,8 @@
 
 #searchInput {
   padding: 15px;
+  border: 1px solid #ccc;
   padding-right: 50px;
-  border: none;
   border-radius: 25px;
   font-size: 18px;
   width: 250px;
@@ -28,12 +27,13 @@
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.4s ease-in-out;
+  pointer-events: none;
 }
 
 #searchContainer:hover #cancelButton,
-#searchInput:focus + #cancelButton,
-#searchInput:not(:placeholder-shown) + #cancelButton {
+#searchInput:focus + #cancelButton {
   opacity: 1;
+  pointer-events: auto;
 }
 
 #suggestionList {
@@ -82,59 +82,117 @@
 }
 
 /* Other styles */
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 5px 0;
-    text-align: center;
+
+/* navbar starts */
+header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.7rem 10%;
+  height: 1rem;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(146,161,176,.3);
 }
+section{
+  min-height: 100vh;
+  padding: 2rem 9%;
+}
+.heading{
+  font-size: 3.5rem;
+  color: rgb(20, 20, 20);
+  font-weight: 800;
+  text-align: center;
+}
+.heading span{
+  color: rgb(115, 3, 167);
+}
+header .logo{
+  font-size: 1.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: #0E2431;
+}
+header .logo i {
+  font-size: 2.2rem;
+}
+header .logo:hover {
+  color: #fc8c05;
+}
+header .navbar ul{
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header .navbar li{
+  margin-left: 2.5rem;
+}
+header .navbar ul li a{
+  font-size: 1.57rem;
+  color: #0E2431;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.04rem;
+}
+header .navbar ul li a.active,
+header .navbar ul li a:hover{
+  color: #011aff;
+  border-bottom: .2rem solid #011aff;
+  padding: .5rem 0;
+}
+/* navbar ends */
+
 
 .container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center; /* Align items vertically */
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; /* Align items vertically */
+  margin-bottom: 20px;
 }
 
 .container > div {
-    flex: 0 0 auto; /* Let the items shrink to fit content */
+  flex: 0 0 auto; /* Let the items shrink to fit content */
 }
 
 .analysis-container {
-    width: 50%; /* Set width for the container to make image and table same width */
-    margin: 0 auto; /* Center align the content */
+  width: 50%; /* Set width for the container to make image and table same width */
+  margin: 0 auto; /* Center align the content */
 }
 
 table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 20px;
-    overflow-x: auto; /* Enable horizontal scroll */
-    display: block; /* Enable vertical scroll */
-    max-height: 400px; /* Set maximum height for vertical scroll */
-    vertical-align: top; /* Align table content to the top */
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  overflow-x: auto; /* Enable horizontal scroll */
+  display: block; /* Enable vertical scroll */
+  max-height: 400px; /* Set maximum height for vertical scroll */
+  vertical-align: top; /* Align table content to the top */
 }
 
-th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-    white-space: nowrap; /* Prevent line breaks in table cells */
+th,
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  white-space: nowrap; /* Prevent line breaks in table cells */
 }
 
 th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 img {
-    max-width: 100%;
-    height: auto;
-    display: block; /* Ensure the image is displayed as a block */
-    margin: 0 auto; /* Center align the image */
+  max-width: 100%;
+  height: auto;
+  display: block; /* Ensure the image is displayed as a block */
+  margin: 0 auto; /* Center align the image */
 }
 
 .scrollable-table {
-    overflow-x: auto;
-    max-height: 450px;
+  overflow-x: auto;
+  max-height: 450px;
 }

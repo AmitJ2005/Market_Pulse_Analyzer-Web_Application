@@ -10,12 +10,20 @@
 </head>
 <body>
 
-  <div id="searchContainer">
-    <input type="text" id="searchInput" >
-    <div id="cancelButton">&#10006;</div>
-    <ul id="suggestionList"></ul>
-  </div>
 
+
+<section class="home" id="home">
+    <div id="searchContainer">
+      <input type="text" id="searchInput" >
+      <div id="cancelButton">&#10006;</div>
+      <ul id="suggestionList"></ul>
+    </div>
+    <div id="particles-js"></div>
+</section>
+
+<!-- particle.js links -->
+<script src="{{ url_for('static', filename='particles.min.js') }}"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 
