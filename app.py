@@ -13,8 +13,66 @@ app = Flask(__name__)
 # Global variables to store the DataFrame and selected stock
 df = pd.DataFrame()
 selected_stock = ''
+stock_symbol = ''
 result_df_same_month = None
 result_df_yearly = None
+result_info = None
+
+
+def fetch_info(stock_symbol):
+    try:
+        # Create a Ticker object for the stock
+        stock_ticker = yf.Ticker(stock_symbol)
+        # Get company information
+        company_info = stock_ticker.info
+        general_info = {
+            "Company Name": company_info.get("shortName", ""),
+            "Industry": company_info.get("industry", ""),
+            "Sector": company_info.get("sector", ""),
+            "Website": company_info.get("website", ""),
+            "longBusinessSummary": company_info.get("longBusinessSummary", ""),
+            "Full-Time Employees": company_info.get("fullTimeEmployees", ""),
+            "companyOfficers": company_info.get("companyOfficers", ""),
+            "dividendRate": company_info.get("dividendRate", ""),
+            "Dividend Yield": company_info.get("dividendYield", ""),
+            "beta": company_info.get("beta", ""),
+            "volume": company_info.get("volume", ""),
+            "marketCap": company_info.get("marketCap", ""),
+            "fiftyTwoWeekLow": company_info.get("fiftyTwoWeekLow", ""),
+            "fiftyTwoWeekHigh": company_info.get("fiftyTwoWeekHigh", ""),
+            "52WeekChange": company_info.get("52WeekChange", ""),
+            "twoHundredDayAverage": company_info.get("twoHundredDayAverage", ""),
+            "enterpriseValue": company_info.get("enterpriseValue", ""),
+            "sharesOutstanding": company_info.get("sharesOutstanding", ""),
+            "floatShares": company_info.get("floatShares", ""),
+            "heldPercentInsiders": company_info.get("heldPercentInsiders", ""),
+            "heldPercentInstitutions": company_info.get("heldPercentInstitutions", ""),
+            "impliedSharesOutstanding": company_info.get("impliedSharesOutstanding", ""),
+            "bookValue": company_info.get("bookValue", ""),
+            "priceToBook": company_info.get("priceToBook", ""),
+            "lastSplitFactor": company_info.get("lastSplitFactor", ""),
+            "lastDividendValue": company_info.get("lastDividendValue", ""),
+            "lastDividendDate": company_info.get("lastDividendDate", ""),
+            "shortName": company_info.get("shortName", ""),
+            "currentPrice": company_info.get("currentPrice", ""),
+            "totalCash": company_info.get("totalCash", ""),
+            "ebitda": company_info.get("ebitda", ""),
+            "totalDebt": company_info.get("totalDebt", ""),
+            "totalRevenue": company_info.get("totalRevenue", ""),
+            "debtToEquity": company_info.get("debtToEquity", ""),
+            "revenuePerShare": company_info.get("revenuePerShare", ""),
+            "grossMargins": company_info.get("grossMargins", ""),
+            "freeCashflow": company_info.get("freeCashflow", ""),
+            "earningsGrowth": company_info.get("earningsGrowth", ""),
+            "revenueGrowth": company_info.get("revenueGrowth", ""),
+            "ebitdaMargins": company_info.get("ebitdaMargins", ""),
+            "operatingMargins": company_info.get("operatingMargins", ""),
+        }
+        return general_info
+
+    except Exception as e:
+        print(f"Error fetching stock information for {stock_symbol}: {e}")
+        return None
 
 
 # Function to fetch historical data using yfinance
@@ -40,13 +98,16 @@ def preprocess_data(data):
 # Function to handle fetching and preprocessing data for selected stock
 def handle_selected_stock(selected_stock):
     global df
-
+    global stock_symbol
+    global result_info
     # Fetch stock symbol based on the selected stock
     try:
         result = search(selected_stock)
         if result['quotes']:
             stock_symbol = result['quotes'][0]['symbol']
             print(f"Stock symbol for {selected_stock}: {stock_symbol}")
+            info = fetch_info(stock_symbol)
+            result_info = info  # Store fetched information globally
             # Fetch historical data
             df = fetch_historical_data(stock_symbol)
             if df is not None:
@@ -54,6 +115,7 @@ def handle_selected_stock(selected_stock):
                 df = preprocess_data(df)
             else:
                 print("Failed to fetch or preprocess data.")
+            return info
         else:
             print(f"No stock symbol found for {selected_stock}")
     except Exception as e:
@@ -113,12 +175,10 @@ def submit_selected_stock():
 @app.route('/visualize_data')
 def visualize_data():
     global df
-    global selected_stock
     global result_df_same_month
     global result_df_yearly
-    # Check if 'Close' column exists in DataFrame
-    if 'Close' not in df.columns:
-        return render_template('result.html', error_message="Close column not found in DataFrame")
+    global result_info
+
     # Initialize fig outside the conditional block
     fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
     # Save the Plotly plot as an HTML string for the line chart
@@ -173,7 +233,7 @@ def visualize_data():
     plot_base64_yearly = generate_bar_plot(result_df_yearly, '2005-2024 Market - Positive or Negative Index')
     return render_template('result.html', df=df, plot_html=plot_html, result_df_same_month=result_df_same_month,
                            result_df_yearly=result_df_yearly, plot_base64_same_month=plot_base64_same_month,
-                           plot_base64_yearly=plot_base64_yearly, selected_stock=selected_stock)
+                           plot_base64_yearly=plot_base64_yearly, result_info=result_info)
 
 
 if __name__ == '__main__':
