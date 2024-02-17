@@ -28,51 +28,82 @@
     </nav>
     </header>
 
-    <!--company information-->
+    <!-- Company Information -->
     <div>
         <h2>Company Information</h2>
+
+        <h3>Basic Details</h3>
         <ul>
             <li><strong>Company Name:</strong> {{ result_info["Company Name"] }}</li>
+            <li><strong>Short Name:</strong> {{ result_info["shortName"] }}</li>
             <li><strong>Industry:</strong> {{ result_info["Industry"] }}</li>
             <li><strong>Sector:</strong> {{ result_info["Sector"] }}</li>
             <li><strong>Website:</strong> {{ result_info["Website"] }}</li>
+        </ul>
+
+        <h3>Business Summary</h3>
+        <ul>
             <li><strong>Long Business Summary:</strong> {{ result_info["longBusinessSummary"] }}</li>
-            <li><strong>Full-Time Employees:</strong> {{ result_info["Full-Time Employees"] }}</li>
-            <li><strong>Company Officers:</strong> {{ result_info["companyOfficers"] }}</li>
-            <li><strong>Dividend Rate:</strong> {{ result_info["dividendRate"] }}</li>
-            <li><strong>Dividend Yield:</strong> {{ result_info["Dividend Yield"] }}</li>
-            <li><strong>Beta:</strong> {{ result_info["beta"] }}</li>
-            <li><strong>Volume:</strong> {{ result_info["volume"] }}</li>
+        </ul>
+
+        <h3>Financial Information</h3>
+        <ul>
             <li><strong>Market Cap:</strong> {{ result_info["marketCap"] }}</li>
-            <li><strong>52 Week Low:</strong> {{ result_info["fiftyTwoWeekLow"] }}</li>
-            <li><strong>52 Week High:</strong> {{ result_info["fiftyTwoWeekHigh"] }}</li>
-            <li><strong>52 Week Change:</strong> {{ result_info["52WeekChange"] }}</li>
-            <li><strong>200 Day Average:</strong> {{ result_info["twoHundredDayAverage"] }}</li>
-            <li><strong>Enterprise Value:</strong> {{ result_info["enterpriseValue"] }}</li>
-            <li><strong>Shares Outstanding:</strong> {{ result_info["sharesOutstanding"] }}</li>
-            <li><strong>Float Shares:</strong> {{ result_info["floatShares"] }}</li>
-            <li><strong>Held Percent Insiders:</strong> {{ result_info["heldPercentInsiders"] }}</li>
-            <li><strong>Held Percent Institutions:</strong> {{ result_info["heldPercentInstitutions"] }}</li>
-            <li><strong>Implied Shares Outstanding:</strong> {{ result_info["impliedSharesOutstanding"] }}</li>
-            <li><strong>Book Value:</strong> {{ result_info["bookValue"] }}</li>
-            <li><strong>Price to Book:</strong> {{ result_info["priceToBook"] }}</li>
-            <li><strong>Last Split Factor:</strong> {{ result_info["lastSplitFactor"] }}</li>
-            <li><strong>Last Dividend Value:</strong> {{ result_info["lastDividendValue"] }}</li>
-            <li><strong>Last Dividend Date:</strong> {{ result_info["lastDividendDate"] }}</li>
-            <li><strong>Short Name:</strong> {{ result_info["shortName"] }}</li>
-            <li><strong>Current Price:</strong> {{ result_info["currentPrice"] }}</li>
-            <li><strong>Total Cash:</strong> {{ result_info["totalCash"] }}</li>
-            <li><strong>EBITDA:</strong> {{ result_info["ebitda"] }}</li>
-            <li><strong>Total Debt:</strong> {{ result_info["totalDebt"] }}</li>
-            <li><strong>Total Revenue:</strong> {{ result_info["totalRevenue"] }}</li>
-            <li><strong>Debt to Equity:</strong> {{ result_info["debtToEquity"] }}</li>
-            <li><strong>Revenue Per Share:</strong> {{ result_info["revenuePerShare"] }}</li>
-            <li><strong>Gross Margins:</strong> {{ result_info["grossMargins"] }}</li>
-            <li><strong>Free Cashflow:</strong> {{ result_info["freeCashflow"] }}</li>
-            <li><strong>Earnings Growth:</strong> {{ result_info["earningsGrowth"] }}</li>
-            <li><strong>Revenue Growth:</strong> {{ result_info["revenueGrowth"] }}</li>
-            <li><strong>EBITDA Margins:</strong> {{ result_info["ebitdaMargins"] }}</li>
-            <li><strong>Operating Margins:</strong> {{ result_info["operatingMargins"] }}</li>
+            <li><strong>Volume:</strong> {{ result_info["volume"] }}</li>
+            <li><strong>Dividend Information</strong>
+                <ul>
+                    <li><strong>Dividend Rate:</strong> {{ result_info["dividendRate"] }}</li>
+                    <li><strong>Dividend Yield:</strong> {{ result_info["Dividend Yield"] }}</li>
+                    <li><strong>Last Dividend Value:</strong> {{ result_info["lastDividendValue"] }}</li>
+                    <li><strong>Last Dividend Date:</strong> {{ result_info["lastDividendDate"] }}</li>
+                </ul>
+            </li>
+            <li><strong>Stock Information</strong>
+                <ul>
+                    <li><strong>Current Price:</strong> {{ result_info["currentPrice"] }}</li>
+                    <li><strong>52 Week Low:</strong> {{ result_info["fiftyTwoWeekLow"] }}</li>
+                    <li><strong>52 Week High:</strong> {{ result_info["fiftyTwoWeekHigh"] }}</li>
+                    <li><strong>52 Week Change:</strong> {{ result_info["52WeekChange"] }}</li>
+                    <li><strong>Price to Book:</strong> {{ result_info["priceToBook"] }}</li>
+                    <li><strong>Last Split Factor:</strong> {{ result_info["lastSplitFactor"] }}</li>
+                </ul>
+            </li>
+            <li><strong>Financial Metrics</strong>
+                <ul>
+                    <li><strong>EBITDA:</strong> {{ result_info["ebitda"] }}</li>
+                    <li><strong>Total Cash:</strong> {{ result_info["totalCash"] }}</li>
+                    <li><strong>Total Debt:</strong> {{ result_info["totalDebt"] }}</li>
+                    <li><strong>Total Revenue:</strong> {{ result_info["totalRevenue"] }}</li>
+                    <li><strong>Debt to Equity:</strong> {{ result_info["debtToEquity"] }}</li>
+                    <li><strong>Revenue Per Share:</strong> {{ result_info["revenuePerShare"] }}</li>
+                    <li><strong>Gross Margins:</strong> {{ result_info["grossMargins"] }}</li>
+                    <li><strong>Free Cashflow:</strong> {{ result_info["freeCashflow"] }}</li>
+                    <li><strong>Earnings Growth:</strong> {{ result_info["earningsGrowth"] }}</li>
+                    <li><strong>Revenue Growth:</strong> {{ result_info["revenueGrowth"] }}</li>
+                    <li><strong>EBITDA Margins:</strong> {{ result_info["ebitdaMargins"] }}</li>
+                    <li><strong>Operating Margins:</strong> {{ result_info["operatingMargins"] }}</li>
+                </ul>
+            </li>
+            <li><strong>Shares Information</strong>
+                <ul>
+                    <li><strong>Shares Outstanding:</strong> {{ result_info["sharesOutstanding"] }}</li>
+                    <li><strong>Float Shares:</strong> {{ result_info["floatShares"] }}</li>
+                    <li><strong>Held Percent Insiders:</strong> {{ result_info["heldPercentInsiders"] }}</li>
+                    <li><strong>Held Percent Institutions:</strong> {{ result_info["heldPercentInstitutions"] }}</li>
+                    <li><strong>Implied Shares Outstanding:</strong> {{ result_info["impliedSharesOutstanding"] }}</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Company Officers</h3>
+        <ul>
+            {% for officer in result_info.companyOfficers %}
+                <li><strong>Name:</strong> {{ officer.Name }}</li>
+                <li><strong>Age:</strong> {{ officer.Age }}</li>
+                <li><strong>Position:</strong> {{ officer.Position }}</li>
+                <li><strong>Salary:</strong> {{ officer.Salary }}</li>
+                <br>
+            {% endfor %}
         </ul>
     </div>
 

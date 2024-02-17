@@ -32,7 +32,6 @@ def fetch_info(stock_symbol):
             "Website": company_info.get("website", ""),
             "longBusinessSummary": company_info.get("longBusinessSummary", ""),
             "Full-Time Employees": company_info.get("fullTimeEmployees", ""),
-            "companyOfficers": company_info.get("companyOfficers", ""),
             "dividendRate": company_info.get("dividendRate", ""),
             "Dividend Yield": company_info.get("dividendYield", ""),
             "beta": company_info.get("beta", ""),
@@ -68,6 +67,19 @@ def fetch_info(stock_symbol):
             "ebitdaMargins": company_info.get("ebitdaMargins", ""),
             "operatingMargins": company_info.get("operatingMargins", ""),
         }
+        # Fetch company officers data
+        company_officers = []
+        for officer in company_info.get("companyOfficers", []):
+            officer_info = {
+                "Name": officer.get("name", ""),
+                "Age": officer.get("age", ""),
+                "Position": officer.get("title", ""),
+                "Salary": officer.get("totalPay", "")
+            }
+            company_officers.append(officer_info)
+
+        # Add company officers data to general_info
+        general_info["companyOfficers"] = company_officers
         return general_info
 
     except Exception as e:
