@@ -9,7 +9,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
   height: 80vh;
   background-color: #f2f2f2;
@@ -19,13 +18,14 @@ body {
   position: relative;
   display: inline-block;
   z-index: 1;
+  margin-top: 400px;
 }
 
 #searchInput {
   padding: 15px;
-  padding-right: 50px;
+  padding-right: 150px;
   border: none;
-  border-radius: 25px;
+  border-radius: 20px;
   font-size: 18px;
   width: 250px;
   outline: none;
@@ -59,7 +59,7 @@ body {
   padding: 0;
   margin: 0;
   position: absolute;
-  width: 410px;
+  width: 513px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
@@ -97,3 +97,4 @@ body {
 #suggestionList li:hover {
   background-color: #f2f2f2;
 }
+
