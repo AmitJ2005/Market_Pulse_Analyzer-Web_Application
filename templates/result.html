@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>Data Visualization</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
 </head>
@@ -116,8 +117,9 @@
     <div class="container">
         <div class="analysis-container">
             <!-- Display Analysis 1 Bar Plot -->
-            <img src="data:image/png;base64, {{ plot_base64_same_month }}" alt="Analysis 1">
+            {{ plot_base64_same_month | safe}}
         </div>
+
         <div class="analysis-container scrollable-table">
             <table>
                 <thead>
@@ -144,8 +146,9 @@
     <div class="container">
         <div class="analysis-container">
             <!-- Display Analysis 2 Bar Plot -->
-            <img src="data:image/png;base64, {{ plot_base64_yearly }}" alt="Analysis 2">
+            {{ plot_base64_yearly | safe}}
         </div>
+
         <div class="analysis-container scrollable-table">
             <table>
                 <thead>

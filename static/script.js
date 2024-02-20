@@ -4,7 +4,7 @@ var typedInstance;
 function initPlaceholderTyping() {
   var placeholderElement = document.getElementById('searchInput').getAttribute('placeholder');
   typedInstance = new Typed("#searchInput", {
-    strings: ["Enter stock name "," Reliance Industries ", " Tata Consultancy Services ", " HDFC Bank ", " State Bank of India ", " Bajaj Finance ", " Hindustan Unilever", " Berger Paints India "], // Use the placeholder text as the string
+    strings: ["Just Search... What U Want "," Reliance Industries. ", " Tata Consultancy Services. ", " HDFC Bank. ", " State Bank of India. ", " Bajaj Finance. ", " Hindustan Unilever.", " Berger Paints India. "], // Use the placeholder text as the string
     typeSpeed: 50,
     backSpeed: 45,
     loop: true,
