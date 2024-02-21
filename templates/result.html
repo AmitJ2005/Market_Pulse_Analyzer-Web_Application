@@ -2,175 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <title>Data Visualization</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
+    <title>Stock Prices Over Time</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script> <!-- Include Moment.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script> <!-- Include Chart.js adapter for Moment.js -->
 </head>
 <body>
-    <header>
-    <!-- Logo -->
-    <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
-
-    <!-- Search container -->
-    <div id="searchContainer">
-        <input type="text" id="searchInput">
-        <div id="cancelButton">&#10006;</div>
-        <ul id="suggestionList"></ul>
-    </div>
-
-    <!-- Navigation links -->
-    <nav class="navbar">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-    </nav>
-    </header>
-
-    <!-- Company Information -->
-    <div>
-        <h2>Company Information</h2>
-
-        <h3>Basic Details</h3>
-        <ul>
-            <li><strong>Company Name:</strong> {{ result_info["Company Name"] }}</li>
-            <li><strong>Short Name:</strong> {{ result_info["shortName"] }}</li>
-            <li><strong>Industry:</strong> {{ result_info["Industry"] }}</li>
-            <li><strong>Sector:</strong> {{ result_info["Sector"] }}</li>
-            <li><strong>Website:</strong> {{ result_info["Website"] }}</li>
-        </ul>
-
-        <h3>Business Summary</h3>
-        <ul>
-            <li><strong>Long Business Summary:</strong> {{ result_info["longBusinessSummary"] }}</li>
-        </ul>
-
-        <h3>Financial Information</h3>
-        <ul>
-            <li><strong>Market Cap:</strong> {{ result_info["marketCap"] }}</li>
-            <li><strong>Volume:</strong> {{ result_info["volume"] }}</li>
-            <li><strong>Dividend Information</strong>
-                <ul>
-                    <li><strong>Dividend Rate:</strong> {{ result_info["dividendRate"] }}</li>
-                    <li><strong>Dividend Yield:</strong> {{ result_info["Dividend Yield"] }}</li>
-                    <li><strong>Last Dividend Value:</strong> {{ result_info["lastDividendValue"] }}</li>
-                    <li><strong>Last Dividend Date:</strong> {{ result_info["lastDividendDate"] }}</li>
-                </ul>
-            </li>
-            <li><strong>Stock Information</strong>
-                <ul>
-                    <li><strong>Current Price:</strong> {{ result_info["currentPrice"] }}</li>
-                    <li><strong>52 Week Low:</strong> {{ result_info["fiftyTwoWeekLow"] }}</li>
-                    <li><strong>52 Week High:</strong> {{ result_info["fiftyTwoWeekHigh"] }}</li>
-                    <li><strong>52 Week Change:</strong> {{ result_info["52WeekChange"] }}</li>
-                    <li><strong>Price to Book:</strong> {{ result_info["priceToBook"] }}</li>
-                    <li><strong>Last Split Factor:</strong> {{ result_info["lastSplitFactor"] }}</li>
-                </ul>
-            </li>
-            <li><strong>Financial Metrics</strong>
-                <ul>
-                    <li><strong>EBITDA:</strong> {{ result_info["ebitda"] }}</li>
-                    <li><strong>Total Cash:</strong> {{ result_info["totalCash"] }}</li>
-                    <li><strong>Total Debt:</strong> {{ result_info["totalDebt"] }}</li>
-                    <li><strong>Total Revenue:</strong> {{ result_info["totalRevenue"] }}</li>
-                    <li><strong>Debt to Equity:</strong> {{ result_info["debtToEquity"] }}</li>
-                    <li><strong>Revenue Per Share:</strong> {{ result_info["revenuePerShare"] }}</li>
-                    <li><strong>Gross Margins:</strong> {{ result_info["grossMargins"] }}</li>
-                    <li><strong>Free Cashflow:</strong> {{ result_info["freeCashflow"] }}</li>
-                    <li><strong>Earnings Growth:</strong> {{ result_info["earningsGrowth"] }}</li>
-                    <li><strong>Revenue Growth:</strong> {{ result_info["revenueGrowth"] }}</li>
-                    <li><strong>EBITDA Margins:</strong> {{ result_info["ebitdaMargins"] }}</li>
-                    <li><strong>Operating Margins:</strong> {{ result_info["operatingMargins"] }}</li>
-                </ul>
-            </li>
-            <li><strong>Shares Information</strong>
-                <ul>
-                    <li><strong>Shares Outstanding:</strong> {{ result_info["sharesOutstanding"] }}</li>
-                    <li><strong>Float Shares:</strong> {{ result_info["floatShares"] }}</li>
-                    <li><strong>Held Percent Insiders:</strong> {{ result_info["heldPercentInsiders"] }}</li>
-                    <li><strong>Held Percent Institutions:</strong> {{ result_info["heldPercentInstitutions"] }}</li>
-                    <li><strong>Implied Shares Outstanding:</strong> {{ result_info["impliedSharesOutstanding"] }}</li>
-                </ul>
-            </li>
-        </ul>
-
-        <h3>Company Officers</h3>
-        <ul>
-            {% for officer in result_info.companyOfficers %}
-                <li><strong>Name:</strong> {{ officer.Name }}</li>
-                <li><strong>Age:</strong> {{ officer.Age }}</li>
-                <li><strong>Position:</strong> {{ officer.Position }}</li>
-                <li><strong>Salary:</strong> {{ officer.Salary }}</li>
-                <br>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <!-- Line Chart - Stock Closing Prices Over Time -->
-    <div>
-        {{ plot_html|safe }}
-    </div>
-
-    <!-- Display Analysis 1 DataFrame - Same Month for Every Year -->
-    <div class="container">
-        <div class="analysis-container">
-            <!-- Display Analysis 1 Bar Plot -->
-            {{ plot_base64_same_month | safe}}
-        </div>
-
-        <div class="analysis-container scrollable-table">
-            <table>
-                <thead>
-                    <tr>
-                        {% for col in result_df_same_month.columns %}
-                            <th>{{ col }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in result_df_same_month.iterrows() %}
-                        <tr>
-                            {% for col in result_df_same_month.columns %}
-                                <td>{{ row[col] }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Display Analysis 2 DataFrame - 2005-2024 Market -->
-    <div class="container">
-        <div class="analysis-container">
-            <!-- Display Analysis 2 Bar Plot -->
-            {{ plot_base64_yearly | safe}}
-        </div>
-
-        <div class="analysis-container scrollable-table">
-            <table>
-                <thead>
-                    <tr>
-                        {% for col in result_df_yearly.columns %}
-                            <th>{{ col }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in result_df_yearly.iterrows() %}
-                        <tr>
-                            {% for col in result_df_yearly.columns %}
-                                <td>{{ row[col] }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <canvas id="myChart" width="400" height="150"></canvas>
+    <script>
+        var labels = {{ labels | safe }};
+        var data = {{ data | safe }};
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Stock Prices Over Time',
+                    data: data,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    fill: false, // Set fill to false to hide area under the line
+                    pointRadius: 0, // Set pointRadius to 0 to hide points on the line
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 1500, // Set animation duration in milliseconds
+                    easing: 'easeInOutQuart', // Set easing function for animation
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'year', // Display only year in the x-axis
+                            tooltipFormat: 'YYYY', // Format for tooltip to display only year
+                            displayFormats: {
+                                year: 'YYYY' // Format for x-axis labels to display only year
+                            }
+                        },
+                        grid: {
+                            display: false // Hide x-axis grid lines
+                        }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        position: 'right', // Position y-axis labels on the right side
+                        grid: {
+                            display: true // Display y-axis grid lines
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

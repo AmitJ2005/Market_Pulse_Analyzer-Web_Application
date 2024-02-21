@@ -4,8 +4,7 @@ import matplotlib
 matplotlib.use('Agg')
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from yahooquery import search
-import plotly.express as px
-import plotly.graph_objects as go
+import json
 
 app = Flask(__name__)
 # Global variables to store the DataFrame and selected stock
@@ -132,20 +131,6 @@ def handle_selected_stock(selected_stock):
         print(f"Error fetching stock symbol for {selected_stock}: {e}")
 
 
-# Function to generate bar plot and return base64 encoded image
-def generate_bar_plot(data, title):
-    # Count the occurrences of each unique value in the 'Direction' column
-    direction_counts = data['Direction'].value_counts()
-    # Define colors for positive and negative values
-    colors = ['red' if label == 'Negative' else 'green' for label in direction_counts.index]
-    fig = go.Figure(
-        data=[go.Bar(x=direction_counts.index, y=direction_counts.values, marker_color=colors)],
-        layout=go.Layout(title=title, xaxis=dict(title='Status'), yaxis=dict(title='Count'))
-    )
-    fig.update_layout(updatemenus=[])
-    plot_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
-    return plot_html
-
 # Route to serve the HTML page
 @app.route('/')
 def index():
@@ -174,71 +159,12 @@ def submit_selected_stock():
 @app.route('/visualize_data')
 def visualize_data():
     global df
-    global result_df_same_month
-    global result_df_yearly
     global result_info
 
-    # line chart
-    fig = px.line(df, x=df.index, y='Close', title='Stock Prices Over Time')
-    # Save the Plotly plot as an HTML string for the line chart
-    plot_html = fig.to_html(full_html=False)
-
-
-    # Analysis 1: Same Month for Every Year - Positive or Negative Index
-    result_data_same_month = []
-    for year in df.index.year.unique():
-        target_data = df[(df.index.year == year) & (df.index.month == 2)]
-        if not target_data.empty:
-            first_day_high = target_data.iloc[0]['Open']
-            last_day_low = target_data.iloc[-1]['Close']
-            month_range = last_day_low - first_day_high
-            direction = 'Positive' if month_range > 0 else 'Negative'
-            percent_change = f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
-            result_data_same_month.append({
-                'Year': year,
-                'High': first_day_high,
-                'Low': last_day_low,
-                'Month_range': month_range,
-                'Direction': direction,
-                'Returns': percent_change
-            })
-    result_df_same_month = pd.DataFrame(result_data_same_month,
-                                        columns=['Year', 'High', 'Low', 'Month_range', 'Direction', 'Returns'])
-    result_df_same_month = result_df_same_month.round(2)
-
-    # Generate bar plot for Analysis 1
-    plot_base64_same_month = generate_bar_plot(result_df_same_month, 'Same Month for Every Year - Positive or Negative Index')
-
-
-    # Analysis 2: 2005-2024 Market - Positive or Negative Index
-    result_data_yearly = []
-    for year in df.index.year.unique():
-        year_data = df[df.index.year == year]
-        if not year_data.empty:
-            first_day_high = year_data.iloc[0]['Open']
-            last_day_low = year_data.iloc[-1]['Close']
-            year_range = last_day_low - first_day_high
-            direction = 'Positive' if year_range > 0 else 'Negative'
-            percent_change = f"{round((last_day_low - first_day_high) / first_day_high * 100, 1)}%"
-            result_data_yearly.append({
-                'Year': year,
-                'High': first_day_high,
-                'Low': last_day_low,
-                'Year_range': year_range,
-                'Direction': direction,
-                'Returns': percent_change
-            })
-    result_df_yearly = pd.DataFrame(result_data_yearly,
-                                    columns=['Year', 'High', 'Low', 'Year_range', 'Direction', 'Returns'])
-    result_df_yearly = result_df_yearly.round(2)
-
-    # Generate bar plot for Analysis 2
-    plot_base64_yearly = generate_bar_plot(result_df_yearly, '2005-2024 Market - Positive or Negative Index')
-
-
-    return render_template('result.html', plot_html=plot_html, result_df_same_month=result_df_same_month,
-                           result_df_yearly=result_df_yearly, plot_base64_same_month=plot_base64_same_month,
-                           plot_base64_yearly=plot_base64_yearly, result_info=result_info)
+    # Prepare data for Chart.js
+    labels = df.index.strftime('%Y-%m-%d').tolist()
+    data = df['Close'].tolist()
+    return render_template('result.html', labels=json.dumps(labels), data=json.dumps(data))
 
 
 if __name__ == '__main__':
