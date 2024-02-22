@@ -5,20 +5,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <select id="monthSelect">
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-    </select>
     <canvas id="myChart" width="400" height="150"></canvas>
     <script>
         var data = {{ data|tojson|safe }};  // This gets the data from Flask
@@ -26,34 +12,24 @@
         var chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: [],  // This will be filled with the years
+                labels: data.map(function(item) { return item.Year; }),  // Fill with the years
                 datasets: [{
                     label: 'Returns',
-                    data: [],  // This will be filled with the returns
-                    backgroundColor: []  // This will be filled with the colors
+                    data: data.map(function(item) { return parseFloat(item.Returns); }),  // Fill with the returns
+                    backgroundColor: data.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })  // Fill with the colors
                 }]
+            },
+            options: {
+                animation: {
+                    duration: 2000  // Animation duration in milliseconds
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
-
-        document.getElementById('monthSelect').addEventListener('change', function() {
-            var month = this.value;
-            var filteredData = data.filter(function(item) {
-                return item.Month == month;
-            });
-            chart.data.labels = filteredData.map(function(item) {
-                return item.Year;
-            });
-            chart.data.datasets[0].data = filteredData.map(function(item) {
-                return item.Returns;
-            });
-            chart.data.datasets[0].backgroundColor = filteredData.map(function(item) {
-                return item.Returns >= 0 ? 'green' : 'red';
-            });
-            chart.update();
-        });
-
-        // Trigger the change event to display the data for January initially
-        document.getElementById('monthSelect').dispatchEvent(new Event('change'));
     </script>
 </body>
 </html>

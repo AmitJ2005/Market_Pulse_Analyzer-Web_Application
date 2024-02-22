@@ -160,29 +160,26 @@ def submit_selected_stock():
 def visualize_data():
     global df
 
-    result_data = []
+    result_data_yearly = []
     for year in df.index.year.unique():
-        for month in range(1, 13):
-            target_data = df[(df.index.year == year) & (df.index.month == month)]
-            if not target_data.empty:
-                first_day_high = target_data.iloc[0]['Open']
-                last_day_low = target_data.iloc[-1]['Close']
-                month_range = last_day_low - first_day_high
-                direction = 'Positive' if month_range > 0 else 'Negative'
-                percent_change = round((last_day_low - first_day_high) / first_day_high * 100, 1)
-                result_data.append({
-                    'Year': year,
-                    'Month': month,
-                    'High': first_day_high,
-                    'Low': last_day_low,
-                    'Month_range': month_range,
-                    'Direction': direction,
-                    'Returns': percent_change
-                })
-    result_df = pd.DataFrame(result_data,
-                             columns=['Year', 'Month', 'High', 'Low', 'Month_range', 'Direction', 'Returns'])
-    result_df = result_df.round(2)
-    return render_template('result.html', data=result_df.to_dict('records'))
-
+        year_data = df[df.index.year == year]
+        if not year_data.empty:
+            first_day_high = year_data.iloc[0]['Open']
+            last_day_low = year_data.iloc[-1]['Close']
+            year_range = last_day_low - first_day_high
+            direction = 'Positive' if year_range > 0 else 'Negative'
+            percent_change = round((last_day_low - first_day_high) / first_day_high * 100, 1)
+            result_data_yearly.append({
+                'Year': year,
+                'High': first_day_high,
+                'Low': last_day_low,
+                'Year_range': year_range,
+                'Direction': direction,
+                'Returns': percent_change
+            })
+    result_df_yearly = pd.DataFrame(result_data_yearly,
+                                    columns=['Year', 'High', 'Low', 'Year_range', 'Direction', 'Returns'])
+    result_df_yearly = result_df_yearly.round(2)
+    return render_template('result.html', data=result_df_yearly.to_dict('records'))
 if __name__ == '__main__':
     app.run(debug=True)
