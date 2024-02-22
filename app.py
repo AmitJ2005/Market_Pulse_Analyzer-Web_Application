@@ -159,13 +159,30 @@ def submit_selected_stock():
 @app.route('/visualize_data')
 def visualize_data():
     global df
-    global result_info
 
-    # Prepare data for Chart.js
-    labels = df.index.strftime('%Y-%m-%d').tolist()
-    data = df['Close'].tolist()
-    return render_template('result.html', labels=json.dumps(labels), data=json.dumps(data))
-
+    result_data = []
+    for year in df.index.year.unique():
+        for month in range(1, 13):
+            target_data = df[(df.index.year == year) & (df.index.month == month)]
+            if not target_data.empty:
+                first_day_high = target_data.iloc[0]['Open']
+                last_day_low = target_data.iloc[-1]['Close']
+                month_range = last_day_low - first_day_high
+                direction = 'Positive' if month_range > 0 else 'Negative'
+                percent_change = round((last_day_low - first_day_high) / first_day_high * 100, 1)
+                result_data.append({
+                    'Year': year,
+                    'Month': month,
+                    'High': first_day_high,
+                    'Low': last_day_low,
+                    'Month_range': month_range,
+                    'Direction': direction,
+                    'Returns': percent_change
+                })
+    result_df = pd.DataFrame(result_data,
+                             columns=['Year', 'Month', 'High', 'Low', 'Month_range', 'Direction', 'Returns'])
+    result_df = result_df.round(2)
+    return render_template('result.html', data=result_df.to_dict('records'))
 
 if __name__ == '__main__':
     app.run(debug=True)
