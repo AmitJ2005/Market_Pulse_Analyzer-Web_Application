@@ -158,8 +158,38 @@ def submit_selected_stock():
 # Visualization route to generate and display plots
 @app.route('/visualize_data')
 def visualize_data():
+    # First visualization
     global df
+    global result_info
+    df.index = pd.to_datetime(df.index)
+    labels = df.index.strftime('%Y-%m-%d').tolist()
+    data = df['Close'].tolist()
 
+    # Second visualization
+    result_data = []
+    for year in df.index.year.unique():
+        for month in range(1, 13):
+            target_data = df[(df.index.year == year) & (df.index.month == month)]
+            if not target_data.empty:
+                first_day_high = target_data.iloc[0]['Open']
+                last_day_low = target_data.iloc[-1]['Close']
+                month_range = last_day_low - first_day_high
+                direction = 'Positive' if month_range > 0 else 'Negative'
+                percent_change = round((last_day_low - first_day_high) / first_day_high * 100, 1)
+                result_data.append({
+                    'Year': year,
+                    'Month': month,
+                    'High': first_day_high,
+                    'Low': last_day_low,
+                    'Month_range': month_range,
+                    'Direction': direction,
+                    'Returns': percent_change
+                })
+    result_df = pd.DataFrame(result_data,
+                             columns=['Year', 'Month', 'High', 'Low', 'Month_range', 'Direction', 'Returns'])
+    result_df = result_df.round(2)
+
+    # Third visualization
     result_data_yearly = []
     for year in df.index.year.unique():
         year_data = df[df.index.year == year]
@@ -180,6 +210,9 @@ def visualize_data():
     result_df_yearly = pd.DataFrame(result_data_yearly,
                                     columns=['Year', 'High', 'Low', 'Year_range', 'Direction', 'Returns'])
     result_df_yearly = result_df_yearly.round(2)
-    return render_template('result.html', data=result_df_yearly.to_dict('records'))
+
+    return render_template('result.html', labels=json.dumps(labels), data=json.dumps(data),
+                           data_monthly=result_df.to_dict('records'), data_yearly=result_df_yearly.to_dict('records'))
+
 if __name__ == '__main__':
     app.run(debug=True)

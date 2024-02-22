@@ -1,29 +1,162 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Visualization</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Data Visualization</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
 </head>
 <body>
-    <canvas id="myChart" width="400" height="150"></canvas>
+    <h1>Stock Data Visualization</h1>
+    <hr width="100%" size="2" color="blue" noshade>
+    <!-- First Visualization: Line Chart -->
+    <canvas id="dailyChart" width="400" height="100"></canvas>
+
+    <hr width="100%" size="2" color="blue" noshade>
+
+    <!-- Second Visualization: Bar Chart for Monthly Data -->
+    <select id="monthSelect">
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+    </select>
+    <canvas id="monthlyChart" width="400" height="100"></canvas>
+
+    <hr width="100%" size="2" color="blue" noshade>
+
+    <!-- Third Visualization: Bar Chart for Yearly Data -->
+    <canvas id="yearlyChart" width="400" height="100"></canvas>
+
+    <hr width="100%" size="2" color="blue" noshade>
+
     <script>
-        var data = {{ data|tojson|safe }};  // This gets the data from Flask
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var chart = new Chart(ctx, {
+        // First Visualization: Line Chart
+        var dailyLabels = {{ labels | safe }};
+            var dailyData = {{ data | safe }};
+            var dailyCtx = document.getElementById('dailyChart').getContext('2d');
+            var dailyChart = new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: dailyLabels,
+                    datasets: [{
+                        label: 'Stock Prices Over Time',
+                        data: dailyData,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        fill: false,
+                        pointRadius: 0,
+                    }]
+                },
+                options: {
+                    animation: {
+                        duration: 3000,
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'year',
+                                tooltipFormat: 'YYYY',
+                                displayFormats: {
+                                    year: 'YYYY'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            position: 'right',
+                            grid: {
+                                display: true
+                            }
+                        }
+                    }
+                }
+            });
+
+        // Second Visualization: Bar Chart for Monthly Data
+        var monthlyData = {{ data_monthly|tojson|safe }};
+        var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        var monthlyChart = new Chart(monthlyCtx, {
             type: 'bar',
             data: {
-                labels: data.map(function(item) { return item.Year; }),  // Fill with the years
+                labels: [],
                 datasets: [{
                     label: 'Returns',
-                    data: data.map(function(item) { return parseFloat(item.Returns); }),  // Fill with the returns
-                    backgroundColor: data.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })  // Fill with the colors
+                    data: [],
+                    backgroundColor: []
                 }]
             },
             options: {
                 animation: {
-                    duration: 2000  // Animation duration in milliseconds
+                    duration: 3000
                 },
                 scales: {
+                    x:{
+                        grid: {
+                            display: false
+                        }
+                    },
+                }
+            }
+
+        });
+
+        document.getElementById('monthSelect').addEventListener('change', function() {
+            var month = this.value;
+            var filteredData = monthlyData.filter(function(item) {
+                return item.Month == month;
+            });
+            monthlyChart.data.labels = filteredData.map(function(item) {
+                return item.Year;
+            });
+            monthlyChart.data.datasets[0].data = filteredData.map(function(item) {
+                return item.Returns;
+            });
+            monthlyChart.data.datasets[0].backgroundColor = filteredData.map(function(item) {
+                return item.Returns >= 0 ? 'green' : 'red';
+            });
+            monthlyChart.update();
+        });
+        document.getElementById('monthSelect').dispatchEvent(new Event('change'));
+
+        // Third Visualization: Bar Chart for Yearly Data
+        var yearlyData = {{ data_yearly|tojson|safe }};
+        var yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+        var yearlyChart = new Chart(yearlyCtx, {
+            type: 'bar',
+            data: {
+                labels: yearlyData.map(function(item) { return item.Year; }),
+                datasets: [{
+                    label: 'Returns',
+                    data: yearlyData.map(function(item) { return parseFloat(item.Returns); }),
+                    backgroundColor: yearlyData.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 3000
+                },
+                scales: {
+                    x:{
+                        grid: {
+                            display: false
+                        }
+                    },
                     y: {
                         beginAtZero: true
                     }
