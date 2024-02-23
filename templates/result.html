@@ -2,216 +2,239 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Visualization</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
     <style>
-        /* Styles for the search bar */
-        #searchContainer {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 20px; /* Add margin to separate from the content */
-        }
-
-       #searchInput {
-    padding: 10px;
-    padding-right: 50px;
-    border: 2px solid #0092FF; /* Add border */
-    border-radius: 20px;
-    font-size: 18px;
-    width: 200px;
-    outline: none;
-    transition: width 0.4s ease-in-out;
+       /* CSS styles for the header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:99%;
+    height:50px;
+    padding: 2px;
+    border-radius: 10px;
+    background-color: rgba(14, 26, 53, 0.85); /* 15% transparent */
 }
 
-#searchInput:focus {
-    width: 350px;
-    border-color: #7DDBBC; /* Change border color on focus */
+#navigation ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#navigation ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+#searchContainer {
+    display: flex;
+    align-items: center;
+    border-radius: 10px; /* Rounded corners */
+    background-color: white; /* White background */
+    padding: 5px; /* Adjust padding */
+}
+
+#searchInput {
+    padding: 5px;
+    margin-right: 10px;
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    border-radius: 20px; /* Rounded corners */
+}
+
+#cancelButton {
+    cursor: pointer;
+    color:red;
+}
+
+#cancelButton:hover {
+    color: red; /* Change color on hover */
 }
 
 
-        #cancelButton {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-        }
-
-        #searchContainer:hover #cancelButton,
-        #searchInput:focus + #cancelButton,
-        #searchInput:not(:placeholder-shown) + #cancelButton {
-            opacity: 1;
-        }
-
-        #suggestionList {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            position: absolute;
-            width: 410px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            z-index: 1;
-            overflow-y: auto;
-            max-height: 200px;
-            opacity: 0;
-            transform-origin: top;
-            transform: scaleY(0);
-            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-            scrollbar-width: thin;
-        }
-
-        /* Scrollbar styles */
-        #suggestionList::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        #suggestionList::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 5px;
-        }
-
-        #suggestionList.show {
-            opacity: 1;
-            transform: scaleY(1);
-        }
-
-        #suggestionList li {
-            cursor: pointer;
-            padding: 15px;
-            border-bottom: 1px solid #ccc;
-            transition: background-color 0.3s ease;
-        }
-
-        #suggestionList li:hover {
-            background-color: #f2f2f2;
-        }
-
-        /* Other styles */
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center; /* Align items vertically */
-            margin-bottom: 20px;
-        }
-
-        .container > div {
-            flex: 0 0 auto; /* Let the items shrink to fit content */
-        }
-
-        .analysis-container {
-            width: 50%; /* Set width for the container to make image and table same width */
-            margin: 0 auto; /* Center align the content */
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 20px;
-            overflow-x: auto; /* Enable horizontal scroll */
-            display: block; /* Enable vertical scroll */
-            max-height: 400px; /* Set maximum height for vertical scroll */
-            vertical-align: top; /* Align table content to the top */
-        }
-
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-            white-space: nowrap; /* Prevent line breaks in table cells */
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block; /* Ensure the image is displayed as a block */
-            margin: 0 auto; /* Center align the image */
-        }
-
-        .scrollable-table {
-            overflow-x: auto;
-            max-height: 450px;
-        }
     </style>
 </head>
 <body>
-    <!-- Search container -->
-    <div id="searchContainer">
-        <input type="text" id="searchInput" placeholder="Enter stock name">
-        <div id="cancelButton">&#10006;</div>
-        <ul id="suggestionList"></ul>
+    <header>
+
+        <div id="navigation">
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+        </div>
+        <div id="searchContainer">
+            <input type="text" id="searchInput" placeholder="Enter stock name">
+            <div id="cancelButton">&#10006;</div>
+            <ul id="suggestionList"></ul>
+        </div>
+    </header>
+
+
+
+    <!-- First Visualization: Line Chart -->
+    <div class="chart-container">
+        <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
 
-    <h1>Selected Stock: {{ selected_stock }}</h1>
 
-    <!-- Line Chart - Stock Closing Prices Over Time -->
-    <div>
-        {{ plot_html|safe }}
+
+    <!-- Second Visualization: Bar Chart for Monthly Data -->
+    <div class="chart-container">
+        <select id="monthSelect">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        <canvas id="monthlyChart" width="400" height="100"></canvas>
     </div>
 
-    <!-- Display Analysis 1 DataFrame - Same Month for Every Year -->
-    <div class="container">
-        <div class="analysis-container">
-            <!-- Display Analysis 1 Bar Plot -->
-            <img src="data:image/png;base64, {{ plot_base64_same_month }}" alt="Analysis 1">
-        </div>
-        <div class="analysis-container scrollable-table">
-            <table>
-                <thead>
-                    <tr>
-                        {% for col in result_df_same_month.columns %}
-                            <th>{{ col }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in result_df_same_month.iterrows() %}
-                        <tr>
-                            {% for col in result_df_same_month.columns %}
-                                <td>{{ row[col] }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+
+
+    <!-- Third Visualization: Bar Chart for Yearly Data -->
+    <div class="chart-container">
+        <canvas id="yearlyChart" width="400" height="100"></canvas>
     </div>
 
-    <!-- Display Analysis 2 DataFrame - 2005-2024 Market -->
-    <div class="container">
-        <div class="analysis-container">
-            <!-- Display Analysis 2 Bar Plot -->
-            <img src="data:image/png;base64, {{ plot_base64_yearly }}" alt="Analysis 2">
-        </div>
-        <div class="analysis-container scrollable-table">
-            <table>
-                <thead>
-                    <tr>
-                        {% for col in result_df_yearly.columns %}
-                            <th>{{ col }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in result_df_yearly.iterrows() %}
-                        <tr>
-                            {% for col in result_df_yearly.columns %}
-                                <td>{{ row[col] }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+    <script>
+   // First Visualization: Line Chart
+var dailyLabels = {{ labels | safe }};
+var dailyData = {{ data | safe }};
+var dailyCtx = document.getElementById('dailyChart').getContext('2d');
+var dailyChart = new Chart(dailyCtx, {
+    type: 'line',
+    data: {
+        labels: dailyLabels,
+        datasets: [{
+            label: 'Stock Prices Over Time',
+            data: dailyData,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+            fill: false,
+            pointRadius: 0,
+        }]
+    },
+    options: {
+        animation: {
+            duration: 3000,
+        },
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'year',
+                    tooltipFormat: 'YYYY',
+                    displayFormats: {
+                        year: 'YYYY'
+                    }
+                },
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                beginAtZero: false,
+                position: 'right',
+                grid: {
+                    display: true
+                }
+            }
+        }
+    }
+});
+
+// Second Visualization: Bar Chart for Monthly Data
+var monthlyData = {{ data_monthly|tojson|safe }};
+var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+var monthlyChart = new Chart(monthlyCtx, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Returns',
+            data: [],
+            backgroundColor: []
+        }]
+    },
+    options: {
+        animation: {
+            duration: 3000
+        },
+        scales: {
+            x:{
+                grid: {
+                    display: false
+                }
+            },
+        }
+    }
+});
+
+document.getElementById('monthSelect').addEventListener('change', function() {
+    var month = this.value;
+    var filteredData = monthlyData.filter(function(item) {
+        return item.Month == month;
+    });
+    monthlyChart.data.labels = filteredData.map(function(item) {
+        return item.Year;
+    });
+    monthlyChart.data.datasets[0].data = filteredData.map(function(item) {
+        return item.Returns;
+    });
+    monthlyChart.data.datasets[0].backgroundColor = filteredData.map(function(item) {
+        return item.Returns >= 0 ? 'green' : 'red';
+    });
+    monthlyChart.update();
+});
+document.getElementById('monthSelect').dispatchEvent(new Event('change'));
+
+// Third Visualization: Bar Chart for Yearly Data
+var yearlyData = {{ data_yearly|tojson|safe }};
+var yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+var yearlyChart = new Chart(yearlyCtx, {
+    type: 'bar',
+    data: {
+        labels: yearlyData.map(function(item) { return item.Year; }),
+        datasets: [{
+            label: 'Returns',
+            data: yearlyData.map(function(item) { return parseFloat(item.Returns); }),
+            backgroundColor: yearlyData.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })
+        }]
+    },
+    options: {
+        animation: {
+            duration: 3000
+        },
+        scales: {
+            x:{
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+    </script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

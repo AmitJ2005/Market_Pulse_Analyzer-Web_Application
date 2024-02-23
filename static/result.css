@@ -1,0 +1,144 @@
+
+.chart-container {
+    width: 98%;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color:#161749;
+}
+
+canvas {
+    width: 80%;
+    height: auto !important;
+    background-color:#161749;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    display: inline-block;
+    margin-right: 10px; /* Adjust as needed */
+}
+
+ul li a {
+    display: inline-block;
+    padding: 8px 16px; /* Adjust padding as needed */
+    text-decoration: none;
+    border-radius: 20px; /* Adjust border radius as needed */
+    background-color: #0E1A35;
+    color: #fff;
+    transition: background-color 0.3s ease; /* Smoother transition */
+}
+
+ul li a:hover {
+    background-color: #900400 ; /* Change color on hover */
+}
+.chart-container {
+    text-align: left; /* Center align the content */
+}
+
+#monthSelect {
+    padding: 8px 12px; /* Adjust padding as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border radius */
+    background-color:white; /* Add background color */
+}
+#monthSelect:hover {
+    background-color: white; /* Change background color on hover */
+}
+#searchContainer {
+  position: relative;
+  display: inline-block;
+}
+
+#searchInput {
+  padding: 15px;
+  padding-right: 50px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  width: 250px;
+  outline: none;
+  transition: width 0.3s ease-in-out;
+}
+
+#searchInput:focus {
+  width: 350px;
+  color: black;
+}
+
+#cancelButton {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  color: red;
+}
+
+#searchContainer:hover #cancelButton,
+#searchInput:focus + #cancelButton,
+#searchInput:not(:placeholder-shown) + #cancelButton {
+  opacity: 1;
+}
+
+#suggestionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%; /* Adjust the width as needed */
+  background-color: #D4D8F3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1;
+  overflow-y: auto;
+  max-height: 200px;
+  opacity: 0;
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  scrollbar-width: thin;
+  top: calc(100% + 5px); /* Position under the search input */
+  left: 0;
+}
+
+#suggestionList::-webkit-scrollbar {
+  width: 10px;
+  color: white;
+}
+
+#suggestionList::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+  color: red;
+}
+
+#suggestionList.show {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+#suggestionList li {
+  cursor: pointer;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+  transition: background-color 0.3s ease;
+  display: block; /* Display each suggestion on a new line */
+}
+
+#suggestionList li:hover {
+  background-color: #f2f2f2;
+}
+
+body {
+  /* Change background color */
+  background-color:#081258; /* Example color */
+}
