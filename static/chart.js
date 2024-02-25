@@ -114,3 +114,56 @@ var yearlyChart = new Chart(yearlyCtx, {
         }
     }
 });
+
+// Fouth Visualization: Pie Chart for Yearly Data
+var monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+];
+var monthlyCtx = document.getElementById('monthlyYearChart').getContext('2d');
+var monthlyYearChart = new Chart(monthlyCtx, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Returns',
+            data: [],
+            backgroundColor: []
+        }]
+    },
+    options: {
+        animation: {
+            duration: 3000
+        },
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                }
+            },
+        }
+    }
+});
+
+document.getElementById('yearSelect').addEventListener('change', function() {
+    var year = this.value;
+    var filteredData = data_yearly.filter(function(item) {
+        return item.Year == year;
+    });
+    var labels = filteredData.map(function(item) {
+        return monthNames[item.Month - 1]; // Assuming monthNames is defined elsewhere with month names
+    });
+    var returns = filteredData.map(function(item) {
+        return item.Returns;
+    });
+    var backgroundColors = filteredData.map(function(item) {
+        return item.Returns >= 0 ? 'green' : 'red';
+    });
+    monthlyYearChart.data.labels = labels;
+    monthlyYearChart.data.datasets[0].data = returns;
+    monthlyYearChart.data.datasets[0].backgroundColor = backgroundColors;
+    monthlyYearChart.update();
+});
+
+// Trigger change event to display data for the default year
+document.getElementById('yearSelect').dispatchEvent(new Event('change'));
