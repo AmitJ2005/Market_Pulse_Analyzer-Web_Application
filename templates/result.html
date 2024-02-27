@@ -8,6 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
 </head>
 <body>
     <script>
@@ -17,7 +20,23 @@
         var yearlyData = {{ data_yearly|tojson|safe }};
         var data_yearly = {{ data_monthly | tojson | safe }};
     </script>
-    <h1>Stock Data Visualization</h1>
+    <header>
+        <!-- Logo -->
+        <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
+        <!-- Search container -->
+        <div id="searchContainer">
+            <input type="text" id="searchInput">
+            <div id="cancelButton">&#10006;</div>
+            <ul id="suggestionList"></ul>
+        </div>
+        <!-- Navigation links -->
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+    </header>
     <hr width="100%" size="2" color="blue" noshade>
     <!-- First Visualization: Line Chart -->
     <canvas id="dailyChart" width="400" height="100"></canvas>

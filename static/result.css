@@ -85,7 +85,7 @@
 
 /* navbar starts */
 header{
-  position: fixed;
+  /* position: fixed; */
   top: 0; left: 0; right: 0;
   z-index: 1000;
   display: flex;
@@ -145,54 +145,3 @@ header .navbar ul li a:hover{
 }
 /* navbar ends */
 
-
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center; /* Align items vertically */
-  margin-bottom: 20px;
-}
-
-.container > div {
-  flex: 0 0 auto; /* Let the items shrink to fit content */
-}
-
-.analysis-container {
-  width: 50%; /* Set width for the container to make image and table same width */
-  margin: 0 auto; /* Center align the content */
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin-bottom: 20px;
-  overflow-x: auto; /* Enable horizontal scroll */
-  display: block; /* Enable vertical scroll */
-  max-height: 400px; /* Set maximum height for vertical scroll */
-  vertical-align: top; /* Align table content to the top */
-}
-
-th,
-td {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-  white-space: nowrap; /* Prevent line breaks in table cells */
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block; /* Ensure the image is displayed as a block */
-  margin: 0 auto; /* Center align the image */
-}
-
-.scrollable-table {
-  overflow-x: auto;
-  max-height: 450px;
-}

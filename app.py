@@ -27,42 +27,15 @@ def fetch_info(stock_symbol):
             "Industry": company_info.get("industry", ""),
             "Sector": company_info.get("sector", ""),
             "Website": company_info.get("website", ""),
-            "longBusinessSummary": company_info.get("longBusinessSummary", ""),
             "Full-Time Employees": company_info.get("fullTimeEmployees", ""),
-            "dividendRate": company_info.get("dividendRate", ""),
-            "Dividend Yield": company_info.get("dividendYield", ""),
-            "beta": company_info.get("beta", ""),
-            "volume": company_info.get("volume", ""),
-            "marketCap": company_info.get("marketCap", ""),
-            "fiftyTwoWeekLow": company_info.get("fiftyTwoWeekLow", ""),
-            "fiftyTwoWeekHigh": company_info.get("fiftyTwoWeekHigh", ""),
-            "52WeekChange": company_info.get("52WeekChange", ""),
-            "twoHundredDayAverage": company_info.get("twoHundredDayAverage", ""),
-            "enterpriseValue": company_info.get("enterpriseValue", ""),
-            "sharesOutstanding": company_info.get("sharesOutstanding", ""),
-            "floatShares": company_info.get("floatShares", ""),
-            "heldPercentInsiders": company_info.get("heldPercentInsiders", ""),
-            "heldPercentInstitutions": company_info.get("heldPercentInstitutions", ""),
-            "impliedSharesOutstanding": company_info.get("impliedSharesOutstanding", ""),
-            "bookValue": company_info.get("bookValue", ""),
-            "priceToBook": company_info.get("priceToBook", ""),
-            "lastSplitFactor": company_info.get("lastSplitFactor", ""),
-            "lastDividendValue": company_info.get("lastDividendValue", ""),
-            "lastDividendDate": company_info.get("lastDividendDate", ""),
-            "shortName": company_info.get("shortName", ""),
             "currentPrice": company_info.get("currentPrice", ""),
-            "totalCash": company_info.get("totalCash", ""),
-            "ebitda": company_info.get("ebitda", ""),
+            "marketCap": company_info.get("marketCap", ""),
+            "averageVolume": company_info.get("averageVolume", ""),
             "totalDebt": company_info.get("totalDebt", ""),
             "totalRevenue": company_info.get("totalRevenue", ""),
-            "debtToEquity": company_info.get("debtToEquity", ""),
-            "revenuePerShare": company_info.get("revenuePerShare", ""),
-            "grossMargins": company_info.get("grossMargins", ""),
+            "totalCash": company_info.get("totalCash", ""),
             "freeCashflow": company_info.get("freeCashflow", ""),
-            "earningsGrowth": company_info.get("earningsGrowth", ""),
-            "revenueGrowth": company_info.get("revenueGrowth", ""),
-            "ebitdaMargins": company_info.get("ebitdaMargins", ""),
-            "operatingMargins": company_info.get("operatingMargins", ""),
+            "longBusinessSummary": company_info.get("longBusinessSummary", ""),
         }
         # Fetch company officers data
         company_officers = []
@@ -163,7 +136,12 @@ def visualize_data():
     global result_info
     df.index = pd.to_datetime(df.index)
     labels = df.index.strftime('%Y-%m-%d').tolist()
-    data = df['Close'].tolist()
+    # Check if 'Close' column is present in df
+    if 'Close' in df.columns:
+        data = df['Close'].tolist()
+    else:
+        print("Error: 'Close' column not found in DataFrame.")
+        data = []
 
     # Second visualization
     result_data = []
@@ -212,7 +190,8 @@ def visualize_data():
     result_df_yearly = result_df_yearly.round(2)
 
     return render_template('result.html', labels=json.dumps(labels), data=json.dumps(data),
-                           data_monthly=result_df.to_dict('records'), data_yearly=result_df_yearly.to_dict('records'))
+                           data_monthly=result_df.to_dict('records'), data_yearly=result_df_yearly.to_dict('records')
+                            , result_info=result_info)
 
 if __name__ == '__main__':
     app.run(debug=True)

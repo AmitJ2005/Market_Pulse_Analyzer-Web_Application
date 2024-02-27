@@ -5,7 +5,7 @@ var dailyChart = new Chart(dailyCtx, {
     data: {
         labels: dailyLabels,
         datasets: [{
-            label: 'Stock Prices Over Time',
+            label: 'Stock Price',
             data: dailyData,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
@@ -22,7 +22,6 @@ var dailyChart = new Chart(dailyCtx, {
                 type: 'time',
                 time: {
                     unit: 'year',
-                    tooltipFormat: 'YYYY',
                     displayFormats: {
                         year: 'YYYY'
                     }
@@ -36,6 +35,24 @@ var dailyChart = new Chart(dailyCtx, {
                 position: 'right',
                 grid: {
                     display: true
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(context) {
+                        var label = context.dataset.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed.y !== null) {
+                            label += '₹' + context.parsed.y.toFixed(1);
+                        }
+                        return label;
+                    }
                 }
             }
         }
