@@ -5,7 +5,7 @@ var dailyChart = new Chart(dailyCtx, {
     data: {
         labels: dailyLabels,
         datasets: [{
-            label: 'Stock Price',
+            label: '', 
             data: dailyData,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
@@ -55,9 +55,16 @@ var dailyChart = new Chart(dailyCtx, {
                     }
                 }
             }
+        },
+        plugins: {
+            legend: {
+                display: false // Disable legend
+            }
         }
     }
 });
+
+
 
 // Second Visualization: Bar Chart for Monthly Data
 var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
@@ -66,7 +73,6 @@ var monthlyChart = new Chart(monthlyCtx, {
     data: {
         labels: [],
         datasets: [{
-            label: 'Returns',
             data: [],
             backgroundColor: []
         }]
@@ -81,6 +87,11 @@ var monthlyChart = new Chart(monthlyCtx, {
                     display: false
                 }
             },
+        },
+        plugins: {
+            legend: {
+                display: false // Remove the legend
+            }
         }
     }
 });
@@ -110,7 +121,6 @@ var yearlyChart = new Chart(yearlyCtx, {
     data: {
         labels: yearlyData.map(function(item) { return item.Year; }),
         datasets: [{
-            label: 'Returns',
             data: yearlyData.map(function(item) { return parseFloat(item.Returns); }),
             backgroundColor: yearlyData.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })
         }]
@@ -128,6 +138,11 @@ var yearlyChart = new Chart(yearlyCtx, {
             y: {
                 beginAtZero: true
             }
+        },
+        plugins: {
+            legend: {
+                display: false // Remove the legend
+            }
         }
     }
 });
@@ -143,7 +158,6 @@ var monthlyYearChart = new Chart(monthlyCtx, {
     data: {
         labels: [],
         datasets: [{
-            label: 'Returns',
             data: [],
             backgroundColor: []
         }]
@@ -158,6 +172,11 @@ var monthlyYearChart = new Chart(monthlyCtx, {
                     display: false
                 }
             },
+        },
+        plugins: {
+            legend: {
+                display: false // Remove the legend
+            }
         }
     }
 });

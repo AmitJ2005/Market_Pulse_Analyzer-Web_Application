@@ -43,8 +43,7 @@ def fetch_info(stock_symbol):
             officer_info = {
                 "Name": officer.get("name", ""),
                 "Age": officer.get("age", ""),
-                "Position": officer.get("title", ""),
-                "Salary": officer.get("totalPay", "")
+                "Position": officer.get("title", "")
             }
             company_officers.append(officer_info)
 

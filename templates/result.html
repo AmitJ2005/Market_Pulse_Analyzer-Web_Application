@@ -25,10 +25,10 @@
         <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
         <!-- Search container -->
         <div id="searchContainer">
-            <input type="text" id="searchInput">
+            <input type="text" id="searchInput" >
             <div id="cancelButton">&#10006;</div>
             <ul id="suggestionList"></ul>
-        </div>
+          </div>
         <!-- Navigation links -->
         <nav class="navbar">
             <ul>
@@ -37,6 +37,19 @@
             </ul>
         </nav>
     </header>
+
+    <h3>Basic Details</h3>
+    <ul>
+        <li><strong>Name:</strong> {{ result_info["Company Name"] }}</li>
+        <li><strong>Industry:</strong> {{ result_info["Industry"] }}</li>
+        <li><strong>Sector:</strong> {{ result_info["Sector"] }}</li>
+        <li><strong>Website:</strong> {{ result_info["Website"] }}</li>
+        <li><strong>Market Cap:</strong> {{ result_info["marketCap"] }}</li>
+        <li><strong>Price:</strong> {{ result_info["currentPrice"] }}</li>
+        <li><strong>About:</strong> {{ result_info["longBusinessSummary"] }}</li>
+        <li><strong>Officer:</strong> {{ result_info["companyOfficers"] }}</li>
+    </ul>
+    
     <hr width="100%" size="2" color="blue" noshade>
     <!-- First Visualization: Line Chart -->
     <canvas id="dailyChart" width="400" height="100"></canvas>
@@ -93,5 +106,6 @@
     <canvas id="monthlyYearChart" width="400" height="100"></canvas>
 
     <script src="../static/chart.js"></script>
+    <script src="../static/script.js"></script>
 </body>
 </html>
