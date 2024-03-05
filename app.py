@@ -139,8 +139,12 @@ def visualize_data():
     if 'Close' in df.columns:
         data = df['Close'].tolist()
     else:
-        print("Error: 'Close' column not found in DataFrame.")
-        data = []
+        error_message = "Error: 'Close' column not found in DataFrame."
+        print(error_message)
+        # Return an appropriate response to the user, or handle the error as needed
+        # For example, you can return a JSON response with the error message
+        return jsonify({'error': error_message}), 400
+
 
     # Second visualization
     result_data = []

@@ -52,6 +52,19 @@
     
     <hr width="100%" size="2" color="blue" noshade>
     <!-- First Visualization: Line Chart -->
+
+    <!-- Button group for selecting time range -->
+    <div id="timeRangeSelector" class="btn-group">
+        <button type="button" class="btn btn-primary" data-value="week">1 Week</button>
+        <button type="button" class="btn btn-primary" data-value="month">1 Month</button>
+        <button type="button" class="btn btn-primary" data-value="6months">6 Months</button>
+        <button type="button" class="btn btn-primary" data-value="year">1 Year</button>
+        <button type="button" class="btn btn-primary" data-value="3years">3 Years</button>
+        <button type="button" class="btn btn-primary" data-value="5years">5 Years</button>
+        <button type="button" class="btn btn-primary" data-value="all">All</button>
+    </div>
+
+    <!-- Canvas for displaying the line chart -->
     <canvas id="dailyChart" width="400" height="100"></canvas>
 
     <hr width="100%" size="2" color="blue" noshade>
