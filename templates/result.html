@@ -38,87 +38,140 @@
         </nav>
     </header>
 
-    <h3>Basic Details</h3>
-    <ul>
-        <li><strong>Name:</strong> {{ result_info["Company Name"] }}</li>
-        <li><strong>Industry:</strong> {{ result_info["Industry"] }}</li>
-        <li><strong>Sector:</strong> {{ result_info["Sector"] }}</li>
-        <li><strong>Website:</strong> {{ result_info["Website"] }}</li>
-        <li><strong>Market Cap:</strong> {{ result_info["marketCap"] }}</li>
-        <li><strong>Price:</strong> {{ result_info["currentPrice"] }}</li>
-        <li><strong>About:</strong> {{ result_info["longBusinessSummary"] }}</li>
-        <li><strong>Officer:</strong> {{ result_info["companyOfficers"] }}</li>
-    </ul>
-    
-    <hr width="100%" size="2" color="blue" noshade>
-    <!-- First Visualization: Line Chart -->
+   <div class="container basic-details">
+        <div class="detail-container">
+            <div class="detail-item">
+                <strong>Name:</strong> {{ result_info["Company Name"] }}
+            </div>
+            <div class="detail-item">
+                <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
+            </div>
 
-    <!-- Button group for selecting time range -->
-    <div id="timeRangeSelector" class="btn-group">
-        <button type="button" class="btn btn-primary" data-value="week">1 Week</button>
-        <button type="button" class="btn btn-primary" data-value="month">1 Month</button>
-        <button type="button" class="btn btn-primary" data-value="6months">6 Months</button>
-        <button type="button" class="btn btn-primary" data-value="year">1 Year</button>
-        <button type="button" class="btn btn-primary" data-value="3years">3 Years</button>
-        <button type="button" class="btn btn-primary" data-value="5years">5 Years</button>
-        <button type="button" class="btn btn-primary" data-value="all">All</button>
+            <div class="detail-item">
+                <strong>Sector:</strong> {{ result_info["Sector"] }}
+            </div>
+            <div class="detail-item">
+                <strong>Website:</strong>
+                    <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
+            </div>
+
+            <div class="detail-item">
+                <strong>Market Cap:</strong>
+                <span id="formattedMarketCap"></span>
+            </div>
+
+            <script>
+                // Function to format market cap
+                function formatMarketCap(marketCap) {
+                    if (marketCap >= 1e12) {
+                        return (marketCap / 1e12).toFixed(2) + " Trillion"; // Divide by 1 trillion and add 'Trillion'
+                    } else if (marketCap >= 1e9) {
+                        return (marketCap / 1e9).toFixed(2) + " Billion"; // Divide by 1 billion and add 'Billion'
+                    } else if (marketCap >= 1e6) {
+                        return (marketCap / 1e6).toFixed(2) + " Million"; // Divide by 1 million and add 'Million'
+                    } else {
+                        return marketCap.toLocaleString(); // Use comma separator
+                    }
+                }
+
+                // Function to update formatted market cap value
+                function updateFormattedMarketCap() {
+                    var marketCap = {{ result_info["marketCap"] }}; // Get the market cap value
+                    document.getElementById("formattedMarketCap").innerText = formatMarketCap(marketCap);
+                }
+
+                // Initial call to update formatted market cap value
+                updateFormattedMarketCap();
+
+                // Assuming result_info["marketCap"] changes dynamically
+                // You need to call updateFormattedMarketCap() whenever result_info["marketCap"] changes
+            </script>
+
+            <div class="detail-item">
+                <strong>Industry:</strong> {{ result_info["Industry"] }}
+            </div>
+        </div>
     </div>
 
-    <!-- Canvas for displaying the line chart -->
-    <canvas id="dailyChart" width="400" height="100"></canvas>
 
-    <hr width="100%" size="2" color="blue" noshade>
+    <!-- First Visualization: Line Chart -->
+    <div class="container visualization-container">
+        <!-- Button group for selecting time range -->
+        <div id="timeRangeSelector" class="btn-group">
+            <button type="button" class="btn btn-primary" data-value="week">1 Week</button>
+            <button type="button" class="btn btn-primary" data-value="month">1 Month</button>
+            <button type="button" class="btn btn-primary" data-value="6months">6 Months</button>
+            <button type="button" class="btn btn-primary" data-value="year">1 Year</button>
+            <button type="button" class="btn btn-primary" data-value="3years">3 Years</button>
+            <button type="button" class="btn btn-primary" data-value="5years">5 Years</button>
+            <button type="button" class="btn btn-primary" data-value="all">All</button>
+        </div>
+
+        <!-- Canvas for displaying the line chart -->
+        <canvas id="dailyChart" width="400" height="100"></canvas>
+    </div>
+
 
     <!-- Second Visualization: Bar Chart for Monthly Data -->
-    <select id="monthSelect">
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-    </select>
-    <canvas id="monthlyChart" width="400" height="100"></canvas>
+    <div class="container visualization-container">
+        <select id="monthSelect">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        <canvas id="monthlyChart" width="400" height="100"></canvas>
+    </div>
 
-    <hr width="100%" size="2" color="blue" noshade>
+
 
     <!-- Third Visualization: Bar Chart for Yearly Data -->
-    <canvas id="yearlyChart" width="400" height="100"></canvas>
+    <div class="container visualization-container">
+        <canvas id="yearlyChart" width="400" height="100"></canvas>
+    </div>
 
-    <hr width="100%" size="2" color="blue" noshade>
+
 
     <!-- Four Visualization: Pie Chart for Yearly Data -->
-    <select id="yearSelect">
-        <option value="2005">2005</option>
-        <option value="2006">2006</option>
-        <option value="2007">2007</option>
-        <option value="2008">2008</option>
-        <option value="2009">2009</option>
-        <option value="2010">2010</option>
-        <option value="2011">2011</option>
-        <option value="2012">2012</option>
-        <option value="2013">2013</option>
-        <option value="2014">2014</option>
-        <option value="2015">2015</option>
-        <option value="2016">2016</option>
-        <option value="2017">2017</option>
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-    </select>
-    <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+    <div class="container visualization-container">
+        <select id="yearSelect">
+            <option value="2005">2005</option>
+            <option value="2006">2006</option>
+            <option value="2007">2007</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+        </select>
+        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+    </div>
+
+    <div class="About">
+        <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
+    </div>
 
     <script src="../static/chart.js"></script>
-    <script src="../static/script.js"></script>
+    <script src="../static/script.js"></script> 
 </body>
 </html>

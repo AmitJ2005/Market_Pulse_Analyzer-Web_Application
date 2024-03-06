@@ -168,3 +168,101 @@ header .navbar ul li a:hover{
 ::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 0 10px;
 }
+/* end the scroll style  */
+
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin: 20px;
+}
+
+/* Styling for Basic Details section */
+.basic-details {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius:20px;
+}
+
+.basic-details ul {
+    list-style-type: none;
+    padding: 0;
+    border:2px solid black;
+}
+
+.basic-details li {
+    margin-bottom: 10px;
+}
+
+/* Styling for Visualization sections */
+.visualization-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius:20px;
+}
+
+.visualization-container select {
+    margin-bottom: 10px;
+}
+
+.visualization-container canvas {
+    width: 100%;
+    height: auto;
+}
+.detail-container {
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.detail-item {
+    flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 10px;
+    margin-right: 20px; /* Space between items */
+    margin-bottom: 20px; /* Space between rows */
+    box-sizing: border-box;
+
+}
+
+.About {
+flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    margin-right: 20px;
+    margin-left: 20px;/* Space between items */
+    margin-bottom: 20px; /* Space between rows */
+    box-sizing: border-box;
+}
+
+/*  css for buttons in line chart */
+
+#timeRangeSelector {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#timeRangeSelector .btn {
+  margin-right: 7px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #5220AB ;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#timeRangeSelector .btn:hover {
+  background-color: #0056b3;
+}
