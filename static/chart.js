@@ -133,7 +133,7 @@ document.getElementById('timeRangeSelector').addEventListener('click', function(
                 // Filter data for the last week
                 var endDateWeek = new Date();
                 var startDateWeek = new Date();
-                startDateWeek.setDate(startDateWeek.getDate() - 7);
+                startDateWeek.setDate(startDateWeek.getDate() - 9);
                 var filteredData = filterDataForDateRange(startDateWeek, endDateWeek);
                 newData = filteredData.newData;
                 newLabels = filteredData.newLabels.map(label => {
@@ -366,6 +366,16 @@ var monthlyYearChart = new Chart(monthlyCtx, {
     }
 });
 
+// Assuming `data_yearly` is your dataframe and it's an array of objects
+var years = [...new Set(data_yearly.map(item => item.Year))]; // Get unique years
+
+var yearSelect = document.getElementById('yearSelect');
+years.forEach(year => {
+    var option = document.createElement('option');
+    option.value = year;
+    option.text = year;
+    yearSelect.appendChild(option);
+});
 document.getElementById('yearSelect').addEventListener('change', function() {
     var year = this.value;
     var filteredData = data_yearly.filter(function(item) {
