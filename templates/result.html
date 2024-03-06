@@ -4,88 +4,120 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
+    <title>Stock Data Visualization</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
-    <style>
-       /* CSS styles for the header */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width:99%;
-    height:50px;
-    padding: 2px;
-    border-radius: 10px;
-    background-color: rgba(14, 26, 53, 0.85); /* 15% transparent */
-}
-
-#navigation ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-#navigation ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-#searchContainer {
-    display: flex;
-    align-items: center;
-    border-radius: 10px; /* Rounded corners */
-    background-color: white; /* White background */
-    padding: 5px; /* Adjust padding */
-}
-
-#searchInput {
-    padding: 5px;
-    margin-right: 10px;
-    border: none; /* Remove border */
-    outline: none; /* Remove outline */
-    border-radius: 20px; /* Rounded corners */
-}
-
-#cancelButton {
-    cursor: pointer;
-    color:red;
-}
-
-#cancelButton:hover {
-    color: red; /* Change color on hover */
-}
-
-
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
 </head>
 <body>
+    <script>
+        var dailyLabels = {{ labels | safe }};
+        var dailyData = {{ data | safe }};
+        var monthlyData = {{ data_monthly|tojson|safe }};
+        var yearlyData = {{ data_yearly|tojson|safe }};
+        var data_yearly = {{ data_monthly | tojson | safe }};
+    </script>
     <header>
-
-        <div id="navigation">
-            <ul>
-                <li><a href="/">Home</a></li>
-            </ul>
-        </div>
+        <!-- Logo -->
+        <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
+        <!-- Search container -->
         <div id="searchContainer">
-            <input type="text" id="searchInput" placeholder="Enter stock name">
+            <input type="text" id="searchInput" >
             <div id="cancelButton">&#10006;</div>
             <ul id="suggestionList"></ul>
-        </div>
+          </div>
+        <!-- Navigation links -->
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
     </header>
+
+   <div class="container basic-details">
+    <div class="detail-container">
+        <div class="detail-item">
+            <strong>Name:</strong> {{ result_info["Company Name"] }}
+        </div>
+       <div class="detail-item">
+            <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
+        </div>
+
+        <div class="detail-item">
+            <strong>Sector:</strong> {{ result_info["Sector"] }}
+        </div>
+        <div class="detail-item">
+            <strong>Website:</strong>
+                <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
+        </div>
+
+       <div class="detail-item">
+    <strong>Market Cap:</strong>
+    <span id="formattedMarketCap"></span>
+</div>
+
+<script>
+    // Function to format market cap
+    function formatMarketCap(marketCap) {
+        if (marketCap >= 1e12) {
+            return (marketCap / 1e12).toFixed(2) + " Trillion"; // Divide by 1 trillion and add 'Trillion'
+        } else if (marketCap >= 1e9) {
+            return (marketCap / 1e9).toFixed(2) + " Billion"; // Divide by 1 billion and add 'Billion'
+        } else if (marketCap >= 1e6) {
+            return (marketCap / 1e6).toFixed(2) + " Million"; // Divide by 1 million and add 'Million'
+        } else {
+            return marketCap.toLocaleString(); // Use comma separator
+        }
+    }
+
+    // Function to update formatted market cap value
+    function updateFormattedMarketCap() {
+        var marketCap = {{ result_info["marketCap"] }}; // Get the market cap value
+        document.getElementById("formattedMarketCap").innerText = formatMarketCap(marketCap);
+    }
+
+    // Initial call to update formatted market cap value
+    updateFormattedMarketCap();
+
+    // Assuming result_info["marketCap"] changes dynamically
+    // You need to call updateFormattedMarketCap() whenever result_info["marketCap"] changes
+</script>
+
+        <div class="detail-item">
+            <strong>Industry:</strong> {{ result_info["Industry"] }}
+        </div>
+
+     </div>
+    </div>
+
 
 
 
     <!-- First Visualization: Line Chart -->
-    <div class="chart-container">
+    <div class="container visualization-container">
+        <!-- Button group for selecting time range -->
+        <div id="timeRangeSelector" class="btn-group">
+            <button type="button" class="btn btn-primary" data-value="week">1 Week</button>
+            <button type="button" class="btn btn-primary" data-value="month">1 Month</button>
+            <button type="button" class="btn btn-primary" data-value="6months">6 Months</button>
+            <button type="button" class="btn btn-primary" data-value="year">1 Year</button>
+            <button type="button" class="btn btn-primary" data-value="3years">3 Years</button>
+            <button type="button" class="btn btn-primary" data-value="5years">5 Years</button>
+            <button type="button" class="btn btn-primary" data-value="all">All</button>
+        </div>
+
+        <!-- Canvas for displaying the line chart -->
         <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
 
 
 
     <!-- Second Visualization: Bar Chart for Monthly Data -->
-    <div class="chart-container">
+    <div class="container visualization-container">
         <select id="monthSelect">
             <option value="1">January</option>
             <option value="2">February</option>
@@ -106,135 +138,44 @@ header {
 
 
     <!-- Third Visualization: Bar Chart for Yearly Data -->
-    <div class="chart-container">
+    <div class="container visualization-container">
         <canvas id="yearlyChart" width="400" height="100"></canvas>
     </div>
 
 
 
-    <script>
-   // First Visualization: Line Chart
-var dailyLabels = {{ labels | safe }};
-var dailyData = {{ data | safe }};
-var dailyCtx = document.getElementById('dailyChart').getContext('2d');
-var dailyChart = new Chart(dailyCtx, {
-    type: 'line',
-    data: {
-        labels: dailyLabels,
-        datasets: [{
-            label: 'Stock Prices Over Time',
-            data: dailyData,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1,
-            fill: false,
-            pointRadius: 0,
-        }]
-    },
-    options: {
-        animation: {
-            duration: 3000,
-        },
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'year',
-                    tooltipFormat: 'YYYY',
-                    displayFormats: {
-                        year: 'YYYY'
-                    }
-                },
-                grid: {
-                    display: false
-                }
-            },
-            y: {
-                beginAtZero: false,
-                position: 'right',
-                grid: {
-                    display: true
-                }
-            }
-        }
-    }
-});
+    <!-- Four Visualization: Pie Chart for Yearly Data -->
+    <div class="container visualization-container">
+        <select id="yearSelect">
+            <option value="2005">2005</option>
+            <option value="2006">2006</option>
+            <option value="2007">2007</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+        </select>
+        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+    </div>
 
-// Second Visualization: Bar Chart for Monthly Data
-var monthlyData = {{ data_monthly|tojson|safe }};
-var monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-var monthlyChart = new Chart(monthlyCtx, {
-    type: 'bar',
-    data: {
-        labels: [],
-        datasets: [{
-            label: 'Returns',
-            data: [],
-            backgroundColor: []
-        }]
-    },
-    options: {
-        animation: {
-            duration: 3000
-        },
-        scales: {
-            x:{
-                grid: {
-                    display: false
-                }
-            },
-        }
-    }
-});
+    <div class="About">
+    <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
+</div>
 
-document.getElementById('monthSelect').addEventListener('change', function() {
-    var month = this.value;
-    var filteredData = monthlyData.filter(function(item) {
-        return item.Month == month;
-    });
-    monthlyChart.data.labels = filteredData.map(function(item) {
-        return item.Year;
-    });
-    monthlyChart.data.datasets[0].data = filteredData.map(function(item) {
-        return item.Returns;
-    });
-    monthlyChart.data.datasets[0].backgroundColor = filteredData.map(function(item) {
-        return item.Returns >= 0 ? 'green' : 'red';
-    });
-    monthlyChart.update();
-});
-document.getElementById('monthSelect').dispatchEvent(new Event('change'));
-
-// Third Visualization: Bar Chart for Yearly Data
-var yearlyData = {{ data_yearly|tojson|safe }};
-var yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
-var yearlyChart = new Chart(yearlyCtx, {
-    type: 'bar',
-    data: {
-        labels: yearlyData.map(function(item) { return item.Year; }),
-        datasets: [{
-            label: 'Returns',
-            data: yearlyData.map(function(item) { return parseFloat(item.Returns); }),
-            backgroundColor: yearlyData.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })
-        }]
-    },
-    options: {
-        animation: {
-            duration: 3000
-        },
-        scales: {
-            x:{
-                grid: {
-                    display: false
-                }
-            },
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-
-    </script>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="../static/chart.js"></script>
+    <script src="../static/script.js"></script>
 </body>
 </html>

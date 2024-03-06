@@ -1,75 +1,25 @@
-
-.chart-container {
-    width: 98%;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color:#161749;
-}
-
-canvas {
-    width: 80%;
-    height: auto !important;
-    background-color:#161749;
-}
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-ul li {
-    display: inline-block;
-    margin-right: 10px; /* Adjust as needed */
-}
-
-ul li a {
-    display: inline-block;
-    padding: 8px 16px; /* Adjust padding as needed */
-    text-decoration: none;
-    border-radius: 20px; /* Adjust border radius as needed */
-    background-color: #0E1A35;
-    color: #fff;
-    transition: background-color 0.3s ease; /* Smoother transition */
-}
-
-ul li a:hover {
-    background-color: #900400 ; /* Change color on hover */
-}
-.chart-container {
-    text-align: left; /* Center align the content */
-}
-
-#monthSelect {
-    padding: 8px 12px; /* Adjust padding as needed */
-    font-size: 16px; /* Adjust font size as needed */
-    border: 1px solid #ccc; /* Add border */
-    border-radius: 5px; /* Add border radius */
-    background-color:white; /* Add background color */
-}
-#monthSelect:hover {
-    background-color: white; /* Change background color on hover */
-}
+/* Styles for the search bar */
 #searchContainer {
   position: relative;
   display: inline-block;
+  border: 1px solid black; /* Add black border */
+  border-radius: 20px; /* Add border radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 #searchInput {
   padding: 15px;
-  padding-right: 50px;
+  padding-right: 150px;
   border: none;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 18px;
   width: 250px;
   outline: none;
-  transition: width 0.3s ease-in-out;
+  transition: width 0.4s ease-in-out;
 }
 
 #searchInput:focus {
   width: 350px;
-  color: black;
 }
 
 #cancelButton {
@@ -80,13 +30,14 @@ ul li a:hover {
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.4s ease-in-out;
-  color: red;
+  pointer-events: none;
+  color: black;
 }
 
 #searchContainer:hover #cancelButton,
-#searchInput:focus + #cancelButton,
-#searchInput:not(:placeholder-shown) + #cancelButton {
+#searchInput:focus + #cancelButton{
   opacity: 1;
+  pointer-events: auto;
 }
 
 #suggestionList {
@@ -94,11 +45,11 @@ ul li a:hover {
   padding: 0;
   margin: 0;
   position: absolute;
-  width: 100%; /* Adjust the width as needed */
-  background-color: #D4D8F3;
+  width: 513px;
+  background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  z-index: 1;
+  border-radius: 8px;
+  z-index: 2;
   overflow-y: auto;
   max-height: 200px;
   opacity: 0;
@@ -106,19 +57,20 @@ ul li a:hover {
   transform: scaleY(0);
   transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
   scrollbar-width: thin;
-  top: calc(100% + 5px); /* Position under the search input */
-  left: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 #suggestionList::-webkit-scrollbar {
-  width: 10px;
-  color: white;
+  width: 26px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 10px solid transparent;
 }
 
 #suggestionList::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 5px;
-  color: red;
+  box-shadow: inset 0 0 0 10px;
 }
 
 #suggestionList.show {
@@ -131,14 +83,193 @@ ul li a:hover {
   padding: 15px;
   border-bottom: 1px solid #ccc;
   transition: background-color 0.3s ease;
-  display: block; /* Display each suggestion on a new line */
 }
 
 #suggestionList li:hover {
   background-color: #f2f2f2;
 }
 
+/* Other styles */
+
+/* navbar starts */
+header{
+  /* position: fixed; */
+  margin-top: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5rem;
+  background-color: #e400d1;
+  box-shadow: 0 1px 4px rgba(146,161,176,.3);
+}
+
 body {
-  /* Change background color */
-  background-color:#081258; /* Example color */
+  margin: 0;
+  overflow-x: hidden; /* Remove horizontal scrollbar */
+  background: whitesmoke; /* Add background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+header .logo{
+  margin-left:2cm;
+  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: #0E2431;
+}
+
+header .logo i {
+  font-size: 2.2rem;
+}
+
+header .logo:hover {
+  color: #fc8c05;
+}
+
+header .navbar ul{
+  margin-right:2cm;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .navbar li{
+  margin-left: 2.5rem;
+}
+
+header .navbar ul li a{
+  font-size: 1.57rem;
+  color: #0E2431;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.04rem;
+}
+
+header .navbar ul li a.active,
+header .navbar ul li a:hover{
+  color: #011aff;
+  border-bottom: .2rem solid #011aff;
+  padding: .5rem 0;
+}
+/* navbar ends */
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar,
+::-webkit-scrollbar-thumb {
+  width: 26px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 10px solid transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 0 10px;
+}
+
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+/* Styling for Basic Details section */
+.basic-details {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius:20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+.basic-details ul {
+    list-style-type: none;
+    padding: 0;
+    border:2px solid black;
+}
+
+.basic-details li {
+    margin-bottom: 10px;
+}
+
+/* Styling for Visualization sections */
+.visualization-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius:20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+.visualization-container select {
+    margin-bottom: 10px;
+}
+
+.visualization-container canvas {
+    width: 100%;
+    height: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+.detail-container {
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.detail-item {
+    flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 10px;
+    margin-right: 20px; /* Space between items */
+    margin-bottom: 20px; /* Space between rows */
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+.About {
+flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    margin-right: 20px;
+    margin-left: 20px;/* Space between items */
+    margin-bottom: 20px; /* Space between rows */
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+/*  css for buttons in line chart */
+
+#timeRangeSelector {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#timeRangeSelector .btn {
+  margin-right: 7px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #5220AB ;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#timeRangeSelector .btn:hover {
+  background-color: #0056b3;
 }
