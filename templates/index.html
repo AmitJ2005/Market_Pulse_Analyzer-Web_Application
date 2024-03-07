@@ -9,18 +9,27 @@
   <title>Stock Search</title>
 </head>
 <body>
-<section class="home" id="home">
+  <div class="loader" id="loader">
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__bar"></div>
+    <div class="loader__ball"></div>
+  </div>
+
+  <section class="home" id="home">
     <div id="searchContainer">
       <input type="text" id="searchInput" >
       <div id="cancelButton">&#10006;</div>
       <ul id="suggestionList"></ul>
     </div>
     <div id="particles-js"></div>
-</section>
+  </section>
 
-<!-- particle.js links -->
-<script src="../static/Js/particles.min.js"></script>
-<script src="../static/Js/app.js"></script>
+  <!-- particle.js links -->
+  <script src="../static/Js/particles.min.js"></script>
+  <script src="../static/Js/app.js"></script>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 

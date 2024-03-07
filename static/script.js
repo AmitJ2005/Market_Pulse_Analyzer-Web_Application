@@ -50,6 +50,9 @@ function loadStocks() {
 }
 // Function to submit selected stock to server
 function submitSelectedStock(selectedStock) {
+  var loader = document.getElementById('loader');
+  loader.style.display = 'block'; // Display the loader
+
   fetch('/submit_selected_stock', {
     method: 'POST',
     headers: {
@@ -62,7 +65,12 @@ function submitSelectedStock(selectedStock) {
       console.log('Selected stock submitted successfully.');
       redirectToVisualizeData(); // Redirect to visualization page after successful submission
     })
-    .catch(error => console.error('Error submitting selected stock:', error));
+    .catch(error => {
+      console.error('Error submitting selected stock:', error);
+    })
+    .finally(() => {
+      loader.style.display = 'none'; // Hide the loader after submission or error
+    });
 }
 
 // Function to display stock suggestions based on user input
@@ -80,7 +88,7 @@ function displayStockSuggestions(searchTerm) {
     var listItem = document.createElement('li');
     listItem.textContent = stock;
     listItem.addEventListener('click', function() {
-    var searchInput = document.getElementById('searchInput');
+      var searchInput = document.getElementById('searchInput');
       searchInput.value = stock; // Set input value to selected stock
       stopTypingAnimation(); // Stop typing animation
       document.getElementById('searchInput').value = stock; // Set input value to selected stock

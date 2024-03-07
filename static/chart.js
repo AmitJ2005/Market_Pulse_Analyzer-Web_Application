@@ -8,7 +8,18 @@ for (var i = 0; i < dailyData.length; i++) {
         filteredData.push(dailyData[i]);
     }
 }
+var buttons = document.querySelectorAll('#timeRangeSelector .btn');
+buttons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // Remove 'selected' class from all buttons
+        buttons.forEach(function(btn) {
+            btn.classList.remove('selected');
+        });
 
+        // Add 'selected' class to the clicked button
+        this.classList.add('selected');
+    });
+});
 // First Visualization: Line Chart
 var dailyCtx = document.getElementById('dailyChart').getContext('2d');
 var dailyChart = new Chart(dailyCtx, {
