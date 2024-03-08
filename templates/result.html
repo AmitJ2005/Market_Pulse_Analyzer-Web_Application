@@ -131,26 +131,49 @@
         <canvas id="monthlyChart" width="400" height="100"></canvas>
     </div>
 
-
-
-    <!-- Third Visualization: Bar Chart for Yearly Data -->
     <div class="container visualization-container">
-        <canvas id="yearlyChart" width="400" height="100"></canvas>
+        <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'Yearly')" id="defaultOpen">Yearly</button>
+            <button class="tablinks" onclick="openCity(event, 'MonthlyYearly')">MonthlyYearly</button>
+        </div>
     </div>
 
-
-
-    <!-- Four Visualization: Pie Chart for Yearly Data -->
     <div class="container visualization-container">
-        <select id="yearSelect">
-            <!-- Options will be populated dynamically in JavaScript -->
-        </select>
-        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+        <div id="Yearly" class="tabcontent">
+            <!-- Third Visualization: Bar Chart for Yearly Data -->
+            <canvas id="yearlyChart" width="400" height="100"></canvas>
+        </div>
+
+
+        <div id="MonthlyYearly" class="tabcontent">
+            <!-- Four Visualization: Pie Chart for Yearly Data -->
+            <select id="yearSelect">
+                <!-- Options will be populated dynamically in JavaScript -->
+            </select>
+            <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+        </div>
+        <script>
+            function openCity(evt, cityName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+                    // By default, display the "Yearly" tab
+                    document.getElementById("defaultOpen").click();
+        </script>
     </div>
 
-    <div class="About">
-        <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
-    </div>
+        <div class="About">
+            <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
+        </div>
 
     <script src="../static/chart.js"></script>
     <script src="../static/script.js"></script> 
