@@ -13,6 +13,14 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
 </head>
 <body>
+    <div class="loader" id="loader">
+        <div class="loader__bar"></div>
+        <div class="loader__bar"></div>
+        <div class="loader__bar"></div>
+        <div class="loader__bar"></div>
+        <div class="loader__bar"></div>
+        <div class="loader__ball"></div>
+    </div>
     <script>
         var dailyLabels = {{ labels | safe }};
         var dailyData = {{ data | safe }};
@@ -38,59 +46,146 @@
         </nav>
     </header>
 
-   <div class="container basic-details">
-        <div class="detail-container">
-            <div class="detail-item">
-                <strong>Name:</strong> {{ result_info["Company Name"] }}
-            </div>
-            <div class="detail-item">
-                <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
-            </div>
-
-            <div class="detail-item">
-                <strong>Sector:</strong> {{ result_info["Sector"] }}
-            </div>
-            <div class="detail-item">
-                <strong>Website:</strong>
-                    <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
-            </div>
-
-            <div class="detail-item">
-                <strong>Market Cap:</strong>
-                <span id="formattedMarketCap"></span>
-            </div>
-
-            <script>
-                // Function to format market cap
-                function formatMarketCap(marketCap) {
-                    if (marketCap >= 1e12) {
-                        return (marketCap / 1e12).toFixed(2) + " Trillion"; // Divide by 1 trillion and add 'Trillion'
-                    } else if (marketCap >= 1e9) {
-                        return (marketCap / 1e9).toFixed(2) + " Billion"; // Divide by 1 billion and add 'Billion'
-                    } else if (marketCap >= 1e6) {
-                        return (marketCap / 1e6).toFixed(2) + " Million"; // Divide by 1 million and add 'Million'
-                    } else {
-                        return marketCap.toLocaleString(); // Use comma separator
-                    }
-                }
-
-                // Function to update formatted market cap value
-                function updateFormattedMarketCap() {
-                    var marketCap = {{ result_info["marketCap"] }}; // Get the market cap value
-                    document.getElementById("formattedMarketCap").innerText = formatMarketCap(marketCap);
-                }
-
-                // Initial call to update formatted market cap value
-                updateFormattedMarketCap();
-
-                // Assuming result_info["marketCap"] changes dynamically
-                // You need to call updateFormattedMarketCap() whenever result_info["marketCap"] changes
-            </script>
-
-            <div class="detail-item">
-                <strong>Industry:</strong> {{ result_info["Industry"] }}
-            </div>
+<div class="container basic-details">
+    <h1 class="centered">{{ result_info["Company Name"] }}</h1>
+    <div class="detail-container">
+        
+        <div class="detail-item">
+            <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
         </div>
+
+        <div class="detail-item">
+            <strong>Sector:</strong> {{ result_info["Sector"] }}
+        </div>
+
+        <div class="detail-item">
+            <strong>Industry:</strong> {{ result_info["Industry"] }}
+        </div>
+
+        <div class="detail-item">
+            <strong>Website:</strong>
+                <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
+        </div>
+
+        <div class="detail-item">
+            <strong>Market Cap:</strong>
+            <span id="formattedMarketCap"></span>
+        </div>
+
+        <div class="detail-item">
+            <strong>Employees:</strong> {{ result_info["Full-Time Employees"] }}
+        </div>
+
+        <div class="detail-item">
+            <strong>Total Debt:</strong> 
+            <span id="formattedTotalDebt"></span>
+        </div>
+
+        <div class="detail-item">
+            <strong>Total Revenue:</strong> 
+            <span id="formattedTotalRevenue"></span>
+        </div>
+
+        <div class="detail-item">
+            <strong>Total Cash:</strong> 
+            <span id="formattedTotalCash"></span>
+        </div>
+
+        <div class="detail-item">
+            <strong>Total Share in Company:</strong> 
+            <span id="formattedTotalShareInCompany"></span>
+        </div>
+        
+        <div class="detail-item">
+            <strong>share in Market:</strong> 
+            <span id="formattedShareInMarket"></span>
+        </div>
+
+        <div class="detail-item">
+            <strong>enterpriseValue:</strong> 
+            <span id="formattedEnterpriseValue"></span>
+        </div>
+
+        <script>
+            // General function to format large numbers
+            function formatLargeNumber(number) {
+                if (number === '') {
+                    return 'No data available'; // Return a default value for empty strings
+                } else if (number >= 1e12) {
+                    return (number / 1e12).toFixed(2) + " Trillion"; // Divide by 1 trillion and add 'Trillion'
+                } else if (number >= 1e9) {
+                    return (number / 1e9).toFixed(2) + " Billion"; // Divide by 1 billion and add 'Billion'
+                } else if (number >= 1e6) {
+                    return (number / 1e6).toFixed(2) + " Million"; // Divide by 1 million and add 'Million'
+                } else {
+                    return number.toLocaleString(); // Use comma separator
+                }
+            }
+
+            // Function to update formatted market cap value
+            function updateFormattedMarketCap() {
+                var marketCap = {{ result_info["marketCap"] }}; // Get the market cap value
+                document.getElementById("formattedMarketCap").innerText = formatLargeNumber(marketCap);
+            }
+
+            // Initial call to update formatted market cap value
+            updateFormattedMarketCap();
+
+            // Function to update formatted total debt value
+            function updateFormattedTotalDebt() {
+                var totalDebt = {{ result_info["totalDebt"] }}; // Get the total debt value
+                document.getElementById("formattedTotalDebt").innerText = formatLargeNumber(totalDebt);
+            }
+
+            // Initial call to update formatted total debt value
+            updateFormattedTotalDebt();
+
+            // Function to update formatted total revenue value
+            function updateFormattedTotalRevenue() {
+                var totalRevenue = {{ result_info["totalRevenue"] }}; // Get the total revenue value
+                document.getElementById("formattedTotalRevenue").innerText = formatLargeNumber(totalRevenue);
+            }
+
+            // Initial call to update formatted total revenue value
+            updateFormattedTotalRevenue();
+
+            function updateFormattedTotalCash() {
+                var totalCash = {{ result_info["totalCash"] }}; // Get the total cash value
+                document.getElementById("formattedTotalCash").innerText = formatLargeNumber(totalCash);
+            }
+
+            // Initial call to update formatted total cash value
+            updateFormattedTotalCash();
+
+            // Function to update formatted total share in company value
+            function updateFormattedTotalShareInCompany() {
+                var totalShareInCompany = {{ result_info["Total Share in Company"] }}; // Get the total share in company value
+                document.getElementById("formattedTotalShareInCompany").innerText = formatLargeNumber(totalShareInCompany);
+            }
+
+            // Initial call to update formatted total share in company value
+            updateFormattedTotalShareInCompany();
+
+            // Function to update formatted share in market value
+            function updateFormattedShareInMarket() {
+                var shareInMarket = {{ result_info["share in Market"] }}; // Get the share in market value
+                document.getElementById("formattedShareInMarket").innerText = formatLargeNumber(shareInMarket);
+            }
+
+            // Initial call to update formatted share in market value
+            updateFormattedShareInMarket();
+
+            // Function to update formatted enterprise value
+            function updateFormattedEnterpriseValue() {
+                var enterpriseValue = {{ result_info["enterpriseValue"] }}; // Get the enterprise value
+                document.getElementById("formattedEnterpriseValue").innerText = formatLargeNumber(enterpriseValue);
+            }
+
+            // Initial call to update formatted enterprise value
+            updateFormattedEnterpriseValue();
+
+        </script>
+</div>
     </div>
 
 
@@ -131,49 +226,22 @@
         <canvas id="monthlyChart" width="400" height="100"></canvas>
     </div>
 
+    <!-- Third Visualization: Bar Chart for Yearly Data -->
     <div class="container visualization-container">
-        <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'Yearly')" id="defaultOpen">Yearly</button>
-            <button class="tablinks" onclick="openCity(event, 'MonthlyYearly')">MonthlyYearly</button>
-        </div>
+        <canvas id="yearlyChart" width="400" height="100"></canvas>
     </div>
 
+    <!-- Four Visualization: Pie Chart for Yearly Data -->
     <div class="container visualization-container">
-        <div id="Yearly" class="tabcontent">
-            <!-- Third Visualization: Bar Chart for Yearly Data -->
-            <canvas id="yearlyChart" width="400" height="100"></canvas>
-        </div>
-
-
-        <div id="MonthlyYearly" class="tabcontent">
-            <!-- Four Visualization: Pie Chart for Yearly Data -->
-            <select id="yearSelect">
-                <!-- Options will be populated dynamically in JavaScript -->
-            </select>
-            <canvas id="monthlyYearChart" width="400" height="100"></canvas>
-        </div>
-        <script>
-            function openCity(evt, cityName) {
-                var i, tabcontent, tablinks;
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-                document.getElementById(cityName).style.display = "block";
-                evt.currentTarget.className += " active";
-            }
-                    // By default, display the "Yearly" tab
-                    document.getElementById("defaultOpen").click();
-        </script>
+        <select id="yearSelect">
+            <!-- Options will be populated dynamically in JavaScript -->
+        </select>
+        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
     </div>
 
-        <div class="About">
-            <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
-        </div>
+    <div class="About">
+        <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
+    </div>
 
     <script src="../static/chart.js"></script>
     <script src="../static/script.js"></script> 

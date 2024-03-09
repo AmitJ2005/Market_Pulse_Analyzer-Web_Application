@@ -26,6 +26,7 @@ def fetch_info(stock_symbol):
             "Company Name": company_info.get("shortName", ""),
             "Industry": company_info.get("industry", ""),
             "Sector": company_info.get("sector", ""),
+            "Industry": company_info.get("industry", ""),
             "Website": company_info.get("website", ""),
             "Full-Time Employees": company_info.get("fullTimeEmployees", ""),
             "currentPrice": company_info.get("currentPrice", ""),
@@ -36,6 +37,9 @@ def fetch_info(stock_symbol):
             "totalCash": company_info.get("totalCash", ""),
             "freeCashflow": company_info.get("freeCashflow", ""),
             "longBusinessSummary": company_info.get("longBusinessSummary", ""),
+            "share in Market": company_info.get("floatShares",""),
+            "Total Share in Company": company_info.get("sharesOutstanding",""),
+            "enterpriseValue": company_info.get("enterpriseValue",""),
         }
         # Fetch company officers data
         company_officers = []
@@ -60,9 +64,6 @@ def fetch_info(stock_symbol):
 def fetch_historical_data(stock_symbol):
     try:
         data = yf.download(stock_symbol, period='max')
-        data.reset_index(inplace=True)
-        data['Date'] = pd.to_datetime(data['Date'])
-        data.set_index('Date', inplace=True)
         return data
     except Exception as e:
         print(f"Error fetching historical data for {stock_symbol}: {e}")
@@ -136,8 +137,9 @@ def visualize_data():
     df.index = pd.to_datetime(df.index)
     labels = df.index.strftime('%Y-%m-%d').tolist()
     # Check if 'Close' column is present in df
-    if 'Close' in df.columns:
-        data = df['Close'].tolist()
+    data = df.get('Close')
+    if data is not None:
+        data = data.tolist()
     else:
         error_message = "Error: 'Close' column not found in DataFrame."
         print(error_message)

@@ -1,9 +1,16 @@
+/* Styling for Basic Details section */
+body {
+  margin: 0;
+  overflow-x: hidden; /* Remove horizontal scrollbar */
+  background: whitesmoke; /* Add background color */
+}
+
 /* Styles for the search bar */
 #searchContainer {
   position: relative;
   display: inline-block;
-  border: 1px solid black; /* Add black border */
-  border-radius: 20px; /* Add border radius */
+  border: 1px solid black; 
+  border-radius: 20px; 
 }
 
 #searchInput {
@@ -15,6 +22,7 @@
   width: 250px;
   outline: none;
   transition: width 0.4s ease-in-out;
+  height: 13px;
 }
 
 #searchInput:focus {
@@ -59,16 +67,12 @@
 }
 
 #suggestionList::-webkit-scrollbar {
-  width: 26px;
-  border-radius: 13px;
-  background-clip: padding-box;
-  border: 10px solid transparent;
+  width: 10px;
 }
 
 #suggestionList::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 5px;
-  box-shadow: inset 0 0 0 10px;
 }
 
 #suggestionList.show {
@@ -86,12 +90,10 @@
 #suggestionList li:hover {
   background-color: #f2f2f2;
 }
-
-/* Other styles */
+/* style for the search bar ends */
 
 /* navbar starts */
-header{
-  /* position: fixed; */
+header {
   margin-top: 0;
   top: 0;
   left: 0;
@@ -100,20 +102,15 @@ header{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 5rem;
-  background-color: #e400d1;
+  height: 4.5em;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
   box-shadow: 0 1px 4px rgba(146,161,176,.3);
-}
-
-body {
-  margin: 0;
-  overflow-x: hidden; /* Remove horizontal scrollbar */
-  background: whitesmoke; /* Add background color */
 }
 
 header .logo{
   margin-left:2cm;
-  text-align: center;
+  text-align: transparent;
   font-size: 1.9rem;
   font-weight: 800;
   text-decoration: none;
@@ -156,19 +153,7 @@ header .navbar ul li a:hover{
 }
 /* navbar ends */
 
-/* Custom scrollbar styles */
-::-webkit-scrollbar,
-::-webkit-scrollbar-thumb {
-  width: 26px;
-  border-radius: 13px;
-  background-clip: padding-box;
-  border: 10px solid transparent;
-}
 
-::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 0 10px;
-}
-/* end the scroll style  */
 
 /* Basic styling */
 body {
@@ -215,6 +200,7 @@ body {
     width: 100%;
     height: auto;
 }
+
 .detail-container {
     display: flex;
     flex-wrap: wrap;
@@ -222,15 +208,20 @@ body {
 }
 
 .detail-item {
-    flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
+    flex: 0 0 calc(25% - 20px); /* Adjust the width as per your requirement */
     border: 2px solid black;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 10px;
     margin-right: 20px; /* Space between items */
     margin-bottom: 20px; /* Space between rows */
     box-sizing: border-box;
 
 }
+.centered {
+  text-align: center;
+}
+
+
 
 .About {
 flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
@@ -256,7 +247,7 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
   border-radius: 6px;
   padding: 10px 20px;
   font-size: 14px;
-  background-color: #5220AB ;
+  background-color: #ff0000 ;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -272,42 +263,345 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
 }
 /*  css for buttons in line chart ends */
 
-/* for the tab */
-.tab {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  width: 100%;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: 1px solid #ccc; /* Add border to the buttons */
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
-  width: 50%;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
+/* loader start */
+.loader {
   display: none;
-  padding: 6px 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 75px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
 }
-.show {
-  display: block;
+
+.loader__bar {
+  position: absolute;
+  bottom: 0;
+  width: 10px;
+  height: 50%;
+  background: rgb(0, 0, 0);
+  transform-origin: center bottom;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
-/* for the tab ends */ 
+
+.loader__bar:nth-child(1) {
+  left: 0px;
+  transform: scale(1, 0.2);
+  -webkit-animation: barUp1 4s infinite;
+  animation: barUp1 4s infinite;
+}
+
+.loader__bar:nth-child(2) {
+  left: 15px;
+  transform: scale(1, 0.4);
+  -webkit-animation: barUp2 4s infinite;
+  animation: barUp2 4s infinite;
+}
+
+.loader__bar:nth-child(3) {
+  left: 30px;
+  transform: scale(1, 0.6);
+  -webkit-animation: barUp3 4s infinite;
+  animation: barUp3 4s infinite;
+}
+
+.loader__bar:nth-child(4) {
+  left: 45px;
+  transform: scale(1, 0.8);
+  -webkit-animation: barUp4 4s infinite;
+  animation: barUp4 4s infinite;
+}
+
+.loader__bar:nth-child(5) {
+  left: 60px;
+  transform: scale(1, 1);
+  -webkit-animation: barUp5 4s infinite;
+  animation: barUp5 4s infinite;
+}
+
+.loader__ball {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: rgb(44, 143, 255);
+  border-radius: 50%;
+  -webkit-animation: ball624 4s infinite;
+  animation: ball624 4s infinite;
+}
+
+@keyframes ball624 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  5% {
+    transform: translate(8px, -14px);
+  }
+
+  10% {
+    transform: translate(15px, -10px);
+  }
+  17% {
+    transform: translate(23px, -24px);
+  }
+
+  20% {
+    transform: translate(30px, -20px);
+  }
+
+  27% {
+    transform: translate(38px, -34px);
+  }
+
+  30% {
+    transform: translate(45px, -30px);
+  }
+
+  37% {
+    transform: translate(53px, -44px);
+  }
+
+  40% {
+    transform: translate(60px, -40px);
+  }
+
+  50% {
+    transform: translate(60px, 0);
+  }
+
+  57% {
+    transform: translate(53px, -14px);
+  }
+
+  60% {
+    transform: translate(45px, -10px);
+  }
+
+  67% {
+    transform: translate(37px, -24px);
+  }
+
+  70% {
+    transform: translate(30px, -20px);
+  }
+
+  77% {
+    transform: translate(22px, -34px);
+  }
+
+  80% {
+    transform: translate(15px, -30px);
+  }
+
+  87% {
+    transform: translate(7px, -44px);
+  }
+
+  90% {
+    transform: translate(0, -40px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@-webkit-keyframes barUp1 {
+  0% {
+    transform: scale(1, 0.2);
+  }
+
+  40% {
+    transform: scale(1, 0.2);
+  }
+
+  50% {
+    transform: scale(1, 1);
+  }
+
+  90% {
+    transform: scale(1, 1);
+  }
+
+  100% {
+    transform: scale(1, 0.2);
+  }
+}
+
+@keyframes barUp1 {
+  0% {
+    transform: scale(1, 0.2);
+  }
+
+  40% {
+    transform: scale(1, 0.2);
+  }
+
+  50% {
+    transform: scale(1, 1);
+  }
+
+  90% {
+    transform: scale(1, 1);
+  }
+
+  100% {
+    transform: scale(1, 0.2);
+  }
+}
+
+@-webkit-keyframes barUp2 {
+  0% {
+    transform: scale(1, 0.4);
+  }
+
+  40% {
+    transform: scale(1, 0.4);
+  }
+
+  50% {
+    transform: scale(1, 0.8);
+  }
+
+  90% {
+    transform: scale(1, 0.8);
+  }
+
+  100% {
+    transform: scale(1, 0.4);
+  }
+}
+
+@keyframes barUp2 {
+  0% {
+    transform: scale(1, 0.4);
+  }
+
+  40% {
+    transform: scale(1, 0.4);
+  }
+
+  50% {
+    transform: scale(1, 0.8);
+  }
+
+  90% {
+    transform: scale(1, 0.8);
+  }
+
+  100% {
+    transform: scale(1, 0.4);
+  }
+}
+
+@-webkit-keyframes barUp3 {
+  0% {
+    transform: scale(1, 0.6);
+  }
+
+  100% {
+    transform: scale(1, 0.6);
+  }
+}
+
+@keyframes barUp3 {
+  0% {
+    transform: scale(1, 0.6);
+  }
+
+  100% {
+    transform: scale(1, 0.6);
+  }
+}
+
+@-webkit-keyframes barUp4 {
+  0% {
+    transform: scale(1, 0.8);
+  }
+
+  40% {
+    transform: scale(1, 0.8);
+  }
+
+  50% {
+    transform: scale(1, 0.4);
+  }
+
+  90% {
+    transform: scale(1, 0.4);
+  }
+
+  100% {
+    transform: scale(1, 0.8);
+  }
+}
+
+@keyframes barUp4 {
+  0% {
+    transform: scale(1, 0.8);
+  }
+
+  40% {
+    transform: scale(1, 0.8);
+  }
+
+  50% {
+    transform: scale(1, 0.4);
+  }
+
+  90% {
+    transform: scale(1, 0.4);
+  }
+
+  100% {
+    transform: scale(1, 0.8);
+  }
+}
+
+@-webkit-keyframes barUp5 {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  40% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1, 0.2);
+  }
+
+  90% {
+    transform: scale(1, 0.2);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes barUp5 {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  40% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1, 0.2);
+  }
+
+  90% {
+    transform: scale(1, 0.2);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+/* loader end */
