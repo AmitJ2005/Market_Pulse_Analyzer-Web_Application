@@ -1,21 +1,38 @@
+/* Import Montserrat font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Apply Montserrat font to body */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color:#DBD9E1;
+}
+
+
+
+body {
+    margin: 0; /* Reset default margin */
+    padding: 0; /* Reset default padding */
+}
+
 /* Styles for the search bar */
 #searchContainer {
   position: relative;
   display: inline-block;
-  border: 1px solid black; /* Add black border */
-  border-radius: 20px; /* Add border radius */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+ /* Add border radius */
+ 
 }
 
 #searchInput {
   padding: 15px;
   padding-right: 150px;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   font-size: 18px;
   width: 250px;
   outline: none;
   transition: width 0.4s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 #searchInput:focus {
@@ -46,7 +63,7 @@
   margin: 0;
   position: absolute;
   width: 513px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   z-index: 2;
@@ -57,7 +74,6 @@
   transform: scaleY(0);
   transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
   scrollbar-width: thin;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 #suggestionList::-webkit-scrollbar {
@@ -103,16 +119,10 @@ header{
   align-items: center;
   justify-content: space-between;
   height: 5rem;
-  background-color: #e400d1;
-  box-shadow: 0 1px 4px rgba(146,161,176,.3);
+  background-color: rgba(255, 255, 255, 0.2);
+
 }
 
-body {
-  margin: 0;
-  overflow-x: hidden; /* Remove horizontal scrollbar */
-  background: whitesmoke; /* Add background color */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
-}
 
 header .logo{
   margin-left:2cm;
@@ -149,54 +159,52 @@ header .navbar ul li a{
   font-weight: 600;
   text-decoration: none;
   letter-spacing: 0.04rem;
+  transition: color 0.3s, padding 0.3s;
 }
-
-header .navbar ul li a.active,
-header .navbar ul li a:hover{
-  color: #011aff;
-  border-bottom: .2rem solid #011aff;
-  padding: .5rem 0;
+header .navbar ul li a:hover {
+  color: #011aff; /* Change text color on hover */
+  padding-top: 0.7rem; /* Increase top padding on hover */
+  padding-bottom: 0.3rem; /* Decrease bottom padding on hover */
 }
 /* navbar ends */
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar,
 ::-webkit-scrollbar-thumb {
-  width: 26px;
-  border-radius: 13px;
+  width: 1px;
+  border-radius: 5px;
   background-clip: padding-box;
-  border: 10px solid transparent;
+  border: 3px solid transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 0 10px;
 }
+/* end the scroll style  */
 
 /* Basic styling */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+
 
 .container {
     margin: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 /* Styling for Basic Details section */
 .basic-details {
-    border: 1px solid #ccc;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius:20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    border-radius:10px;
+    color:black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+
 }
 
 .basic-details ul {
     list-style-type: none;
     padding: 0;
     border:2px solid black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+
 }
 
 .basic-details li {
@@ -208,18 +216,20 @@ body {
     border: 1px solid #ccc;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius:20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    border-radius:10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    color:#D8D8D8;
 }
 
 .visualization-container select {
     margin-bottom: 10px;
+
 }
 
 .visualization-container canvas {
     width: 100%;
     height: auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 .detail-container {
     display: flex;
@@ -229,25 +239,27 @@ body {
 
 .detail-item {
     flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
-    border: 2px solid black;
-    border-radius: 20px;
+    border: 0.67px solid grey;
+    border-radius: 10px;
     padding: 10px;
     margin-right: 20px; /* Space between items */
     margin-bottom: 20px; /* Space between rows */
     box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    background-color:#F2EDED;
+
 }
 
 .About {
 flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
-    border: 1px solid #ccc;
-    border-radius: 20px;
+    border: 1px solid grey;
+    border-radius: 10px;
     padding: 10px;
     margin-right: 20px;
     margin-left: 20px;/* Space between items */
     margin-bottom: 20px; /* Space between rows */
     box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    background-color: rgba(255, 255, 255, 0.1);
+    color:black;
 }
 
 /*  css for buttons in line chart */
@@ -273,3 +285,48 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
 #timeRangeSelector .btn:hover {
   background-color: #0056b3;
 }
+
+#timeRangeSelector .btn.selected {
+  background-color: #0056b3;
+}
+/*  css for buttons in line chart ends */
+
+/* for the tab */
+.tab {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: 1px solid #ccc; /* Add border to the buttons */
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  width: 50%;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+}
+.show {
+  display: block;
+}
+/* for the tab ends */ 

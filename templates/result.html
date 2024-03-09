@@ -22,7 +22,7 @@
     </script>
     <header>
         <!-- Logo -->
-        <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
+        <a href="/" class="logo"><i class="fab fa-node-js"></i>COMPANY</a>
         <!-- Search container -->
         <div id="searchContainer">
             <input type="text" id="searchInput" >
@@ -32,69 +32,66 @@
         <!-- Navigation links -->
         <nav class="navbar">
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="/">HOME</a></li>
+                <li><a href="about.html">ABOUT</a></li>
             </ul>
         </nav>
     </header>
 
    <div class="container basic-details">
-    <div class="detail-container">
-        <div class="detail-item">
-            <strong>Name:</strong> {{ result_info["Company Name"] }}
+        <div class="detail-container">
+            <div class="detail-item">
+                <strong>Name:</strong> {{ result_info["Company Name"] }}
+            </div>
+            <div class="detail-item">
+                <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
+            </div>
+
+            <div class="detail-item">
+                <strong>Sector:</strong> {{ result_info["Sector"] }}
+            </div>
+            <div class="detail-item">
+                <strong>Website:</strong>
+                    <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
+            </div>
+
+            <div class="detail-item">
+                <strong>Market Cap:</strong>
+                <span id="formattedMarketCap"></span>
+            </div>
+
+            <script>
+                // Function to format market cap
+                function formatMarketCap(marketCap) {
+                    if (marketCap >= 1e12) {
+                        return (marketCap / 1e12).toFixed(2) + " Trillion"; // Divide by 1 trillion and add 'Trillion'
+                    } else if (marketCap >= 1e9) {
+                        return (marketCap / 1e9).toFixed(2) + " Billion"; // Divide by 1 billion and add 'Billion'
+                    } else if (marketCap >= 1e6) {
+                        return (marketCap / 1e6).toFixed(2) + " Million"; // Divide by 1 million and add 'Million'
+                    } else {
+                        return marketCap.toLocaleString(); // Use comma separator
+                    }
+                }
+
+                // Function to update formatted market cap value
+                function updateFormattedMarketCap() {
+                    var marketCap = {{ result_info["marketCap"] }}; // Get the market cap value
+                    document.getElementById("formattedMarketCap").innerText = formatMarketCap(marketCap);
+                }
+
+                // Initial call to update formatted market cap value
+                updateFormattedMarketCap();
+
+                // Assuming result_info["marketCap"] changes dynamically
+                // You need to call updateFormattedMarketCap() whenever result_info["marketCap"] changes
+            </script>
+
+            <div class="detail-item">
+                <strong>Industry:</strong> {{ result_info["Industry"] }}
+            </div>
         </div>
-       <div class="detail-item">
-            <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
-        </div>
-
-        <div class="detail-item">
-            <strong>Sector:</strong> {{ result_info["Sector"] }}
-        </div>
-        <div class="detail-item">
-            <strong>Website:</strong>
-                <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
-        </div>
-
-       <div class="detail-item">
-    <strong>Market Cap:</strong>
-    <span id="formattedMarketCap"></span>
-</div>
-
-<script>
-    // Function to format market cap
-    function formatMarketCap(marketCap) {
-        if (marketCap >= 1e12) {
-            return (marketCap / 1e12).toFixed(2) + " Trillion"; // Divide by 1 trillion and add 'Trillion'
-        } else if (marketCap >= 1e9) {
-            return (marketCap / 1e9).toFixed(2) + " Billion"; // Divide by 1 billion and add 'Billion'
-        } else if (marketCap >= 1e6) {
-            return (marketCap / 1e6).toFixed(2) + " Million"; // Divide by 1 million and add 'Million'
-        } else {
-            return marketCap.toLocaleString(); // Use comma separator
-        }
-    }
-
-    // Function to update formatted market cap value
-    function updateFormattedMarketCap() {
-        var marketCap = {{ result_info["marketCap"] }}; // Get the market cap value
-        document.getElementById("formattedMarketCap").innerText = formatMarketCap(marketCap);
-    }
-
-    // Initial call to update formatted market cap value
-    updateFormattedMarketCap();
-
-    // Assuming result_info["marketCap"] changes dynamically
-    // You need to call updateFormattedMarketCap() whenever result_info["marketCap"] changes
-</script>
-
-        <div class="detail-item">
-            <strong>Industry:</strong> {{ result_info["Industry"] }}
-        </div>
-
-     </div>
     </div>
-
-
 
 
     <!-- First Visualization: Line Chart -->
@@ -113,7 +110,6 @@
         <!-- Canvas for displaying the line chart -->
         <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
-
 
 
     <!-- Second Visualization: Bar Chart for Monthly Data -->
@@ -135,45 +131,49 @@
         <canvas id="monthlyChart" width="400" height="100"></canvas>
     </div>
 
-
-
-    <!-- Third Visualization: Bar Chart for Yearly Data -->
     <div class="container visualization-container">
-        <canvas id="yearlyChart" width="400" height="100"></canvas>
+        <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'Yearly')" id="defaultOpen">Yearly</button>
+            <button class="tablinks" onclick="openCity(event, 'MonthlyYearly')">MonthlyYearly</button>
+        </div>
     </div>
 
-
-
-    <!-- Four Visualization: Pie Chart for Yearly Data -->
     <div class="container visualization-container">
-        <select id="yearSelect">
-            <option value="2005">2005</option>
-            <option value="2006">2006</option>
-            <option value="2007">2007</option>
-            <option value="2008">2008</option>
-            <option value="2009">2009</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-            <option value="2014">2014</option>
-            <option value="2015">2015</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-        </select>
-        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+        <div id="Yearly" class="tabcontent">
+            <!-- Third Visualization: Bar Chart for Yearly Data -->
+            <canvas id="yearlyChart" width="400" height="100"></canvas>
+        </div>
+
+
+        <div id="MonthlyYearly" class="tabcontent">
+            <!-- Four Visualization: Pie Chart for Yearly Data -->
+            <select id="yearSelect">
+                <!-- Options will be populated dynamically in JavaScript -->
+            </select>
+            <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+        </div>
+        <script>
+            function openCity(evt, cityName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+                    // By default, display the "Yearly" tab
+                    document.getElementById("defaultOpen").click();
+        </script>
     </div>
 
-    <div class="About">
-    <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
-</div>
+        <div class="About">
+            <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
+        </div>
 
     <script src="../static/chart.js"></script>
     <script src="../static/script.js"></script>
