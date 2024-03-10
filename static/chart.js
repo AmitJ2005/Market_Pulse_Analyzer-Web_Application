@@ -144,14 +144,14 @@ document.getElementById('timeRangeSelector').addEventListener('click', function(
                 // Filter data for the last week
                 var endDateWeek = new Date();
                 var startDateWeek = new Date();
-                startDateWeek.setDate(startDateWeek.getDate() - 9);
+                startDateWeek.setDate(startDateWeek.getDate() - 7);
                 var filteredData = filterDataForDateRange(startDateWeek, endDateWeek);
                 newData = filteredData.newData;
                 newLabels = filteredData.newLabels.map(label => {
                     var date = new Date(label);
                     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    return date.getDate().toString() + ' ' + monthNames[date.getMonth()] ; // Format the label as a day
+                    return date.getDate().toString() + ' ' + monthNames[date.getMonth()]; // Format the label as a day
                 });
                 break;
             
@@ -317,8 +317,14 @@ var yearlyChart = new Chart(yearlyCtx, {
     data: {
         labels: yearlyData.map(function(item) { return item.Year; }),
         datasets: [{
-            data: yearlyData.map(function(item) { return parseFloat(item.Returns); }),
-            backgroundColor: yearlyData.map(function(item) { return item.Direction == 'Positive' ? 'green' : 'red'; })
+            data: yearlyData.map(function(item) { 
+                // Ensure all values are positive
+                return Math.abs(parseFloat(item.Returns)); 
+            }),
+            backgroundColor: yearlyData.map(function(item) { 
+                // Retain original colors based on positive/negative values
+                return item.Returns >= 0 ? 'green' : 'red'; 
+            })
         }]
     },
     options: {
@@ -326,13 +332,15 @@ var yearlyChart = new Chart(yearlyCtx, {
             duration: 3000
         },
         scales: {
-            x:{
+            x: {
                 grid: {
                     display: false
                 }
             },
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                // Ensure only positive values are shown on the y-axis
+                suggestedMin: 0
             }
         },
         plugins: {
@@ -342,6 +350,7 @@ var yearlyChart = new Chart(yearlyCtx, {
         }
     }
 });
+
 
 // Fouth Visualization: Pie Chart for Yearly Data
 var monthNames = [
@@ -387,6 +396,7 @@ years.forEach(year => {
     option.text = year;
     yearSelect.appendChild(option);
 });
+yearSelect.value = "2023";
 document.getElementById('yearSelect').addEventListener('change', function() {
     var year = this.value;
     var filteredData = data_yearly.filter(function(item) {

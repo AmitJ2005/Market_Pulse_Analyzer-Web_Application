@@ -23,7 +23,7 @@ def fetch_info(stock_symbol):
         # Get company information
         company_info = stock_ticker.info
         general_info = {
-            "Company Name": company_info.get("shortName", ""),
+            "Company Name": company_info.get("longName", ""),
             "Industry": company_info.get("industry", ""),
             "Sector": company_info.get("sector", ""),
             "Industry": company_info.get("industry", ""),
@@ -110,6 +110,9 @@ def index():
     print("Rendering index.html")
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/stock_names.json')
 def get_stock_names():

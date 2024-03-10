@@ -208,14 +208,17 @@ body {
 }
 
 .detail-item {
-    flex: 0 0 calc(25% - 20px); /* Adjust the width as per your requirement */
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    margin-right: 20px; /* Space between items */
-    margin-bottom: 20px; /* Space between rows */
-    box-sizing: border-box;
-
+  /* display: inline-block; */
+  flex: 0 0 calc(25% - 95px);
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 20px; /* Space between items */
+  margin-bottom: 20px; /* Space between rows */
+  box-sizing: border-box;
+  height: 40px; /* Adjust the height as per your requirement */
+  white-space: nowrap;
+  
 }
 .centered {
   text-align: center;

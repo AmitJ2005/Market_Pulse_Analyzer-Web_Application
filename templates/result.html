@@ -41,7 +41,7 @@
         <nav class="navbar">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="/about">About</a></li>
             </ul>
         </nav>
     </header>
@@ -68,12 +68,18 @@
         </div>
 
         <div class="detail-item">
-            <strong>Market Cap:</strong>
-            <span id="formattedMarketCap"></span>
+            <strong>Total Revenue:</strong> 
+            <span id="formattedTotalRevenue"></span>
         </div>
 
         <div class="detail-item">
-            <strong>Employees:</strong> {{ result_info["Full-Time Employees"] }}
+            <strong>Enterprise Value:</strong> 
+            <span id="formattedEnterpriseValue"></span>
+        </div>
+
+        <div class="detail-item">
+            <strong>Market Cap:</strong>
+            <span id="formattedMarketCap"></span>
         </div>
 
         <div class="detail-item">
@@ -82,28 +88,22 @@
         </div>
 
         <div class="detail-item">
-            <strong>Total Revenue:</strong> 
-            <span id="formattedTotalRevenue"></span>
-        </div>
-
-        <div class="detail-item">
             <strong>Total Cash:</strong> 
             <span id="formattedTotalCash"></span>
         </div>
 
+        <div class="detail-item">
+            <strong>Employees:</strong> {{ result_info["Full-Time Employees"] }}
+        </div>
+            
         <div class="detail-item">
             <strong>Total Share in Company:</strong> 
             <span id="formattedTotalShareInCompany"></span>
         </div>
         
         <div class="detail-item">
-            <strong>share in Market:</strong> 
+            <strong>Total Share in Market:</strong> 
             <span id="formattedShareInMarket"></span>
-        </div>
-
-        <div class="detail-item">
-            <strong>enterpriseValue:</strong> 
-            <span id="formattedEnterpriseValue"></span>
         </div>
 
         <script>
@@ -185,8 +185,8 @@
             updateFormattedEnterpriseValue();
 
         </script>
-</div>
     </div>
+</div>
 
 
     <!-- First Visualization: Line Chart -->
@@ -206,6 +206,18 @@
         <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
 
+    <!-- Third Visualization: Bar Chart for Yearly Data -->
+    <div class="container visualization-container">
+        <canvas id="yearlyChart" width="400" height="100"></canvas>
+    </div>
+  
+    <!-- Four Visualization: Pie Chart for Yearly Data -->
+    <div class="container visualization-container">
+        <select id="yearSelect">
+            <!-- Options will be populated dynamically in JavaScript -->
+        </select>
+        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+    </div>
 
     <!-- Second Visualization: Bar Chart for Monthly Data -->
     <div class="container visualization-container">
@@ -224,19 +236,6 @@
             <option value="12">December</option>
         </select>
         <canvas id="monthlyChart" width="400" height="100"></canvas>
-    </div>
-
-    <!-- Third Visualization: Bar Chart for Yearly Data -->
-    <div class="container visualization-container">
-        <canvas id="yearlyChart" width="400" height="100"></canvas>
-    </div>
-
-    <!-- Four Visualization: Pie Chart for Yearly Data -->
-    <div class="container visualization-container">
-        <select id="yearSelect">
-            <!-- Options will be populated dynamically in JavaScript -->
-        </select>
-        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
     </div>
 
     <div class="About">
