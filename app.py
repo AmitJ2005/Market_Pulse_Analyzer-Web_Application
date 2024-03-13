@@ -1,13 +1,10 @@
 import pandas as pd
 import yfinance as yf
-import matplotlib
-matplotlib.use('Agg')
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from yahooquery import search
 import json
 
 app = Flask(__name__)
-# Global variables to store the DataFrame and selected stock
 df = pd.DataFrame()
 selected_stock = ''
 stock_symbol = ''
@@ -26,7 +23,6 @@ def fetch_info(stock_symbol):
             "Company Name": company_info.get("longName", ""),
             "Industry": company_info.get("industry", ""),
             "Sector": company_info.get("sector", ""),
-            "Industry": company_info.get("industry", ""),
             "Website": company_info.get("website", ""),
             "Full-Time Employees": company_info.get("fullTimeEmployees", ""),
             "currentPrice": company_info.get("currentPrice", ""),
@@ -137,17 +133,23 @@ def visualize_data():
     # First visualization
     global df
     global result_info
+
+    # Check if df is None or empty
+    if df is None or df.empty:
+        error_message = "Error: No data available. Please submit a stock symbol first."
+        print(error_message)
+        return jsonify({'error': error_message}), 400
+
     df.index = pd.to_datetime(df.index)
     labels = df.index.strftime('%Y-%m-%d').tolist()
-    # Check if 'Close' column is present in df
-    data = df.get('Close')
-    if data is not None:
-        data = data.tolist()
-    else:
+
+    try:
+        # Attempt to access the 'Close' column
+        data = df['Close'].tolist()
+    except KeyError:
+        # Handle the error if the 'Close' column is not found
         error_message = "Error: 'Close' column not found in DataFrame."
         print(error_message)
-        # Return an appropriate response to the user, or handle the error as needed
-        # For example, you can return a JSON response with the error message
         return jsonify({'error': error_message}), 400
 
 

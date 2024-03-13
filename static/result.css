@@ -153,7 +153,42 @@ header .navbar ul li a:hover{
 }
 /* navbar ends */
 
-
+/* side bar */
+#sidebar {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 120px; /* Increased width for better visibility */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  color: #fff;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow for 3D effect */
+  border-top-right-radius: 10px; /* Add this line */
+  border-bottom-right-radius: 10px; /* Add this line */
+}
+#sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+#sidebar ul li {
+  margin-bottom: 15px; /* Increased bottom margin for better spacing */
+}
+#sidebar ul li a {
+  display: block;
+  text-decoration: none;
+  color: #fff; /* White text for better contrast */
+  padding: 5px;
+  width: 90%; /* Add this line */
+  margin: auto;
+  transition: color 0.3s ease, background-color 0.3s ease; /* Transition for color as well */
+}
+#sidebar ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background on hover */
+  color: #ffd700; /* Gold text on hover */
+}
+/* side bar end */
 
 /* Basic styling */
 body {
@@ -269,7 +304,7 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
 /* loader start */
 .loader {
   display: none;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   width: 75px;

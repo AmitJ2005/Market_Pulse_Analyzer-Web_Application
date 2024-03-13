@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="loader" id="loader">
@@ -21,6 +22,30 @@
         <div class="loader__bar"></div>
         <div class="loader__ball"></div>
     </div>
+    <div id="sidebar">
+        <ul>
+            <li><a href="#details">Details</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#first-visualization">line Chart</a></li>
+            <li><a href="#second-visualization">Same Month</a></li>
+            <li><a href="#third-visualization">Year Return</a></li>
+            <li><a href="#fourth-visualization">Month Return</a></li>
+        </ul>
+    </div>
+    <script>
+    $(document).ready(function(){
+        $('a[href^="#"]').on('click', function(e) {
+            e.preventDefault();
+
+            var target = this.hash;
+            var $target = $(target);
+
+            $('html, body').animate({
+                'scrollTop': $target.offset().top - 50 // Subtract 50 pixels
+            }, 1000, 'swing');
+        });
+    });
+    </script>
     <script>
         var dailyLabels = {{ labels | safe }};
         var dailyData = {{ data | safe }};
@@ -190,7 +215,7 @@
 
 
     <!-- First Visualization: Line Chart -->
-    <div class="container visualization-container">
+    <div id="first-visualization" class="container visualization-container">
         <!-- Button group for selecting time range -->
         <div id="timeRangeSelector" class="btn-group">
             <button type="button" class="btn btn-primary" data-value="week">1 Week</button>
@@ -205,22 +230,8 @@
         <!-- Canvas for displaying the line chart -->
         <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
-
-    <!-- Third Visualization: Bar Chart for Yearly Data -->
-    <div class="container visualization-container">
-        <canvas id="yearlyChart" width="400" height="100"></canvas>
-    </div>
-  
-    <!-- Four Visualization: Pie Chart for Yearly Data -->
-    <div class="container visualization-container">
-        <select id="yearSelect">
-            <!-- Options will be populated dynamically in JavaScript -->
-        </select>
-        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
-    </div>
-
-    <!-- Second Visualization: Bar Chart for Monthly Data -->
-    <div class="container visualization-container">
+     <!-- Second Visualization: Bar Chart for Monthly Data -->
+     <div id="second-visualization" class="container visualization-container">
         <select id="monthSelect">
             <option value="1">January</option>
             <option value="2">February</option>
@@ -236,6 +247,21 @@
             <option value="12">December</option>
         </select>
         <canvas id="monthlyChart" width="400" height="100"></canvas>
+    </div>
+
+   
+
+    <!-- Third Visualization: Bar Chart for Yearly Data -->
+    <div id="third-visualization"  class="container visualization-container">
+        <canvas id="yearlyChart" width="400" height="100"></canvas>
+    </div>
+  
+    <!-- Four Visualization: Pie Chart for Yearly Data -->
+    <div id="fourth-visualization"  class="container visualization-container">
+        <select id="yearSelect">
+            <!-- Options will be populated dynamically in JavaScript -->
+        </select>
+        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
     </div>
 
     <div class="About">
