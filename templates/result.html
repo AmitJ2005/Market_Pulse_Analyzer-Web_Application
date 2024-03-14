@@ -33,6 +33,14 @@
         </ul>
     </div>
     <script>
+        document.addEventListener('mousemove', function(e) {
+            var sidebar = document.getElementById('sidebar');
+            if (e.clientX < 50) { // If the mouse is within 50px of the left edge
+                sidebar.style.width = '120px'; // Show the sidebar
+            } else {
+                sidebar.style.width = '0'; // Hide the sidebar
+            }
+        });
     $(document).ready(function(){
         $('a[href^="#"]').on('click', function(e) {
             e.preventDefault();

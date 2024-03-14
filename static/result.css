@@ -159,7 +159,9 @@ header .navbar ul li a:hover{
   top: 50%;
   left: 0;
   transform: translateY(-50%);
-  width: 120px; /* Increased width for better visibility */
+  width: 100px; /* Set a minimum width */
+  overflow: auto; /* Add this line */
+  transition: width 0.5s ease;
   background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
   color: #fff;
   padding: 20px;
