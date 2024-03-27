@@ -12,6 +12,91 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+
+        body {
+              /* Default background color */
+              background-color: #d9d9d9; /* Light mode background */
+              color: rgb(66, 62, 62); /* Light mode text color */
+            }
+        
+        .toggle-switch {
+          position: relative;
+          width: 100px;
+          height: 50px;
+          margin: 20px auto; /* Center the toggle switch */
+          --light: #d8dbe0;
+          --dark: #28292c;
+        }
+    
+        .switch-label {
+          display: block;
+          width: 100%;
+          height: 50px;
+          background-color: #28292c; /* Dark mode background */
+          border-radius: 25px;
+          cursor: pointer;
+          border: 3px solid #28292c; /* Dark mode border color */
+          transition: background-color 0.3s ease;
+        }
+    
+        .checkbox {
+          position: absolute;
+          opacity: 0; /* Hide the checkbox */
+          width: 100%;
+          height: 100%;
+          cursor: pointer; /* Show pointer cursor on checkbox */
+        }
+    
+        .slider {
+          position: absolute;
+          width: 50px; /* Adjust width to fit the slider */
+          height: relative;
+          background-color: #d8dbe0; /* Light mode slider color */
+          border-radius: 25px;
+          transition: background-color 0.3s ease;
+        }
+    
+        .checkbox:checked ~ .slider {
+          background-color: var(--light); /* Dark mode slider color */
+        }
+    
+        .slider::before {
+          content: "";
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          width: 30px; /* Adjust width to fit the handle */
+          height: 30px; /* Adjust height to fit the handle */
+          border-radius: 50%;
+          background-color: #d8dbe0; /* Light mode handle color */
+          transition: transform 0.3s ease;
+        }
+    
+        .checkbox:checked ~ .slider::before {
+          transform: translateX(50px); /* Move handle to the right */
+          background-color: #28292c; /* Dark mode handle color */
+        }
+    
+        /* Define colors for light and dark modes */
+        body.dark-mode {
+          background-color: #3f3f40; /* Dark mode background */
+          color: #d9d9d9; /* Dark mode text color */
+        }
+    
+        body.dark-mode .switch-label {
+          background-color: #d8dbe0; /* Light mode background */
+          border-color: #d8dbe0; /* Light mode border color */
+        }
+    
+            /* Add custom styles for toggle switch placement */
+            .toggle-switch-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
     <div class="loader" id="loader">
@@ -78,6 +163,14 @@
             </ul>
         </nav>
     </header>
+    <div class="toggle-switch-container">
+        <div class="toggle-switch">
+            <label class="switch-label" for="toggleCheckbox">
+                <input id="toggleCheckbox" type="checkbox" class="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
 
 <div class="container basic-details">
     <h1 class="centered">{{ result_info["Company Name"] }}</h1>
@@ -278,5 +371,11 @@
 
     <script src="../static/chart.js"></script>
     <script src="../static/script.js"></script> 
+    <script>
+        // Function to toggle between dark and light modes
+        document.getElementById('toggleCheckbox').addEventListener('change', function() {
+          document.body.classList.toggle('dark-mode', this.checked); // Toggle 'dark-mode' class based on checkbox state
+        });
+      </script>
 </body>
 </html>
