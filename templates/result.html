@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="loader" id="loader">
@@ -77,65 +78,82 @@
                 <li><a href="/about">About</a></li>
             </ul>
         </nav>
+        
+        <div class="theme">
+            <span class="theme__toggle-wrap">
+                <input id="theme" class="theme__toggle" type="checkbox" role="switch" name="theme" value="dark">
+                <span class="theme__fill"></span>
+                <span class="theme__icon">
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                    <span class="theme__icon-part"></span>
+                </span>
+            </span>
+        </div>        
     </header>
 
 <div class="container basic-details">
-    <h1 class="centered">{{ result_info["Company Name"] }}</h1>
+    <div class="centered">
+        <h1>{{ result_info["Company Name"] }}</h1>
+        <h3>₹{{ result_info["currentPrice"] }}</h3>
+    </div>
     <div class="detail-container">
-        
+
         <div class="detail-item">
-            <strong>Price: </strong> ₹{{ result_info["currentPrice"] }}
+            <strong>Sector: 🏢</strong> {{ result_info["Sector"] }}
         </div>
 
         <div class="detail-item">
-            <strong>Sector:</strong> {{ result_info["Sector"] }}
+            <strong>Industry: 🏭</strong> {{ result_info["Industry"] }}
         </div>
 
         <div class="detail-item">
-            <strong>Industry:</strong> {{ result_info["Industry"] }}
-        </div>
-
-        <div class="detail-item">
-            <strong>Website:</strong>
+            <strong>Website: 🌐</strong>
                 <a href="{{ result_info['Website'] }}" target="_blank">{{ result_info['Website'] }}</a>
         </div>
 
         <div class="detail-item">
-            <strong>Total Revenue:</strong> 
+            <strong>Total Revenue: 💰</strong> 
             <span id="formattedTotalRevenue"></span>
         </div>
 
         <div class="detail-item">
-            <strong>Enterprise Value:</strong> 
+            <strong>Enterprise Value: 💸</strong> 
             <span id="formattedEnterpriseValue"></span>
         </div>
 
         <div class="detail-item">
-            <strong>Market Cap:</strong>
+            <strong>Market Cap: 📈</strong>
             <span id="formattedMarketCap"></span>
         </div>
 
         <div class="detail-item">
-            <strong>Total Debt:</strong> 
+            <strong>Loan: 💳</strong> 
             <span id="formattedTotalDebt"></span>
         </div>
 
         <div class="detail-item">
-            <strong>Total Cash:</strong> 
+            <strong>Cash: 💵</strong> 
             <span id="formattedTotalCash"></span>
         </div>
 
         <div class="detail-item">
-            <strong>Employees:</strong> {{ result_info["Full-Time Employees"] }}
+            <strong>Employees: 👥</strong> {{ result_info["Full-Time Employees"] }}
         </div>
             
         <div class="detail-item">
-            <strong>Total Share in Company:</strong> 
+            <strong>Total Share in Company: 📊</strong> 
             <span id="formattedTotalShareInCompany"></span>
         </div>
         
         <div class="detail-item">
-            <strong>Total Share in Market:</strong> 
+            <strong>Share in Market: 📉</strong> 
             <span id="formattedShareInMarket"></span>
         </div>
 
@@ -239,21 +257,24 @@
         <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
      <!-- Second Visualization: Bar Chart for Monthly Data -->
-     <div id="second-visualization" class="container visualization-container">
-        <select id="monthSelect">
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-        </select>
+    <div id="second-visualization" class="container visualization-container">
+        <div class="flex-container">
+            <h2>Same Month in Every Year</h2>
+            <select id="monthSelect">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
         <canvas id="monthlyChart" width="400" height="100"></canvas>
     </div>
 
@@ -261,14 +282,18 @@
 
     <!-- Third Visualization: Bar Chart for Yearly Data -->
     <div id="third-visualization"  class="container visualization-container">
+        <h2>Yearly Return</h2>
         <canvas id="yearlyChart" width="400" height="100"></canvas>
     </div>
   
     <!-- Four Visualization: Pie Chart for Yearly Data -->
     <div id="fourth-visualization"  class="container visualization-container">
-        <select id="yearSelect">
-            <!-- Options will be populated dynamically in JavaScript -->
-        </select>
+        <div class="flex-container">
+            <h2>Monthly Return</h2>
+            <select id="yearSelect">
+                <!-- Options will be populated dynamically in JavaScript -->
+            </select>
+        </div>
         <canvas id="monthlyYearChart" width="400" height="100"></canvas>
     </div>
 

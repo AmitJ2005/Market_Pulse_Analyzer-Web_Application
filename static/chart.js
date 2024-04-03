@@ -259,6 +259,8 @@ document.getElementById('timeRangeSelector').addEventListener('click', function(
 
 // Trigger click event on the first button to display data for the default time range
 document.getElementById('timeRangeSelector').querySelector('button').click();
+// Trigger click event on the button to display data for the 'month' time range
+document.querySelector('button[data-value="month"]').click();
 
 
 
@@ -419,3 +421,11 @@ document.getElementById('yearSelect').addEventListener('change', function() {
 
 // Trigger change event to display data for the default year
 document.getElementById('yearSelect').dispatchEvent(new Event('change'));
+
+
+// dark mode 
+// Function to toggle between dark and light modes
+document.getElementById('theme').addEventListener('change', function() {
+    document.body.classList.toggle('dark-mode', this.checked); // Toggle 'dark-mode' class based on checkbox state
+});
+

@@ -11,8 +11,69 @@ stock_symbol = ''
 result_df_same_month = None
 result_df_yearly = None
 result_info = None
+year_income = None
+
+def year_income_statement(stock_symbol):
+    try:
+        stock = yf.Ticker(stock_symbol)
+        # Get stock info
+        income_statement = stock.income_stmt
+        income_statement = income_statement.loc[["Total Revenue", "Operating Revenue", "Gross Profit", "Operating Income", "EBITDA", "EBIT", "Net Income", "Diluted EPS", "Basic EPS", "Interest Expense", "Net Interest Income", "Tax Provision", "Tax Rate For Calcs", "Diluted NI Availto Com Stockholders", "Net Income Common Stockholders", "Basic Average Shares", "Diluted Average Shares", "Total Other Finance Cost", "Special Income Charges", "Other Special Charges"]]
+        quarterly_statement=stock.quarterly_income_stmt
+
+        balance_sheet=stock.balance_sheet
+        quarterly_balance=stock.quarterly_balance_sheet
+
+        cashflow=stock.cashflow
+
+        major_holders=stock.major_holders
+
+        mutualfund_holders=stock.mutualfund_holders
+
+        insider_transactions=stock.insider_transactions
+
+        insider_roster_holders=stock.insider_roster_holders
 
 
+        # print(income_statement)
+        # 
+        
+        print('income_statement')
+        print(income_statement)
+        print() 
+        print(quarterly_statement)
+        print()
+
+        print("balance_sheet")
+        print(balance_sheet)
+        print()
+        print(quarterly_balance)
+        print()
+
+        print("cashflow")
+        print(cashflow)
+        print()
+
+        print("major_holders")
+        print(major_holders)
+        print()
+
+        print("mutualfund_holders")
+        print(mutualfund_holders)
+        print()
+
+        print("insider_transactions")
+        print(insider_transactions)
+        print()
+
+        print("insider_roster_holders")
+        print(insider_roster_holders)
+        print()
+
+    except Exception as e:
+        print(f"Error fetching income statement for {stock_symbol}: {e}")
+        return None
+        
 def fetch_info(stock_symbol):
     try:
         # Create a Ticker object for the stock
@@ -59,7 +120,8 @@ def fetch_info(stock_symbol):
 # Function to fetch historical data using yfinance
 def fetch_historical_data(stock_symbol):
     try:
-        data = yf.download(stock_symbol, period='max')
+        ticker = yf.Ticker(stock_symbol)
+        data = ticker.history(period='max')
         return data
     except Exception as e:
         print(f"Error fetching historical data for {stock_symbol}: {e}")
@@ -78,14 +140,16 @@ def handle_selected_stock(selected_stock):
     global df
     global stock_symbol
     global result_info
+    global year_income
     # Fetch stock symbol based on the selected stock
     try:
         result = search(selected_stock)
         if result['quotes']:
             stock_symbol = result['quotes'][0]['symbol']
             print(f"Stock symbol for {selected_stock}: {stock_symbol}")
-            info = fetch_info(stock_symbol)
-            result_info = info  # Store fetched information globally
+            year_income = year_income_statement(stock_symbol)
+            # Fetch company information
+            result_info = fetch_info(stock_symbol)
             # Fetch historical data
             df = fetch_historical_data(stock_symbol)
             if df is not None:
@@ -93,7 +157,7 @@ def handle_selected_stock(selected_stock):
                 df = preprocess_data(df)
             else:
                 print("Failed to fetch or preprocess data.")
-            return info
+            return result_info
         else:
             print(f"No stock symbol found for {selected_stock}")
     except Exception as e:
@@ -130,13 +194,12 @@ def submit_selected_stock():
 # Visualization route to generate and display plots
 @app.route('/visualize_data')
 def visualize_data():
-    # First visualization
     global df
     global result_info
 
-    # Check if df is None or empty
+    # First visualization
     if df is None or df.empty:
-        error_message = "Error: No data available. Please submit a stock symbol first."
+        error_message = "aaj mood nhi hai thoda scroll kr leta hu"
         print(error_message)
         return jsonify({'error': error_message}), 400
 

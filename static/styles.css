@@ -1,6 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
-  font-family: Arial, sans-serif;
+  background-image: url('../static/image/blueprint.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  font-family: 'Poppins'  , sans-serif;
   margin: 0;
   display: flex;
   justify-content: center;
@@ -8,6 +13,60 @@ body {
   align-items: center;
   background-color: #b5aeae;
 }
+
+/* For screens smaller than 768px */
+@media screen and (max-width: 768px) {
+  header {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+  }
+
+  .logo img {
+    width: 80px; /* Adjust logo size for smaller screens */
+  }
+
+  nav ul {
+    flex-direction: column; /* Stack navigation items vertically */
+    text-align: center; /* Center text horizontally */
+  }
+
+  nav ul li {
+    margin-left: 0; /* Remove margin between navigation items */
+    margin-top: 10px; /* Add space between navigation items */
+  }
+}
+
+/* For screens smaller than 768px */
+@media screen and (max-width: 768px) {
+  #searchContainer {
+    left: 50%; /* Center search container */
+    transform: translateX(-50%); /* Adjust horizontal position */
+    width: 90%; /* Adjust search container width */
+  }
+
+  #searchInput {
+    width: calc(100% - 100px); /* Adjust search input width */
+    padding-right: 100px; /* Adjust padding to accommodate cancel button */
+  }
+
+  #cancelButton {
+    right: 10px; /* Adjust cancel button position */
+  }
+
+  #suggestionList {
+    width: 90%; /* Adjust suggestion list width */
+    left: 5%; /* Center suggestion list */
+  }
+}
+
+/* For screens smaller than 576px */
+@media screen and (max-width: 576px) {
+  #searchInput {
+    width: calc(100% - 50px); /* Adjust search input width */
+    padding-right: 50px; /* Adjust padding to accommodate cancel button */
+  }
+}
+
 
 #searchContainer {
   position: absolute;
@@ -25,7 +84,7 @@ body {
   border: none;
   border-radius: 10px;
   font-size: 18px;
-  width: 250px;
+  width: 255px;
   outline: none;
   transition: width 0.4s ease-in-out;
 }
@@ -52,7 +111,6 @@ body {
   opacity: 1;
   pointer-events: auto;
 }
-
 #suggestionList {
     list-style: none;
     padding: 0;
@@ -60,7 +118,7 @@ body {
     position: absolute;
     top: 60px; /* Adjust as needed */
     left: 10px; /* Adjust as needed */
-    width: 513px;
+    width: 498px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
@@ -71,16 +129,12 @@ body {
     transform-origin: top;
     transform: scaleY(0);
     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-    scrollbar-width: thin;
+    scrollbar-width: none; /* Hide the scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide the scrollbar for Internet Explorer and Edge */
 }
 
 #suggestionList::-webkit-scrollbar {
-  width: 10px;
-}
-
-#suggestionList::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 5px;
+  display: none; /* Hide the scrollbar for WebKit browsers (Chrome, Safari, etc.) */
 }
 
 #suggestionList.show {
@@ -98,6 +152,7 @@ body {
 #suggestionList li:hover {
   background-color: #f2f2f2;
 }
+
 
 /* loader start */
 .loader {
@@ -447,29 +502,15 @@ html, body {
   padding: 0;
   height: 100%;
 }
-
-.video-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.video-container video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 100%;
-  object-fit: cover;
-}
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: fixed; /* Change from 'relative' to 'fixed' */
+  top: 0;
+  width: 100%; /* Ensure header spans the entire width of the viewport */
   z-index: 1;
 }
 
