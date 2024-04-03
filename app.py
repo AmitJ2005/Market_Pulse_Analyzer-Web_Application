@@ -174,6 +174,14 @@ def index():
 def about():
     return render_template('about.html')
 
+@app.route('/sign_up')
+def sign_up():
+    return render_template('sign_up.html')
+
+@app.route('/login')
+def login():
+    return render_template('Login.html')
+
 @app.route('/stock_names.json')
 def get_stock_names():
     # Logic to read and return stock_names.json

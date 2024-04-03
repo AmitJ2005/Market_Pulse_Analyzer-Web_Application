@@ -24,20 +24,23 @@
       <ul id="suggestionList"></ul>
     </div>
   </section>
-    <header>
-      <div class="logo">
+  <header>   
+    <nav>
+      <div class="logo" onclick="toggleMenu()">
+        <img src="../static/image/user.png" alt="User Logo">
       </div>
-      <nav>
-        <ul>
-          <li><a href="/about">About Us</a></li>
-          <!-- Add more list items for additional navigation links -->
-        </ul>
-      </nav>
-    </header>
-    </header>
-
-  <!-- particle.js links -->
-  <script src="../static/Js/app.js"></script>
+      <ul>
+        <li><a href="/about">About_Us</a></li>
+        <!-- Add more list items for additional navigation links -->
+      </ul>
+      <div class="menu" id="menu">
+        <a href="/sign_up"><button>Sign_Up</button></a>
+        <a href="/login"><button>Login</button></a>
+        <button onclick="logout()">Logout</button>
+        <button onclick="openSupport()">Support</button>
+      </div>
+    </nav>
+  </header>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
