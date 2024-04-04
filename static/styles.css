@@ -1,17 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
-  background-image: url('../static/image/blueprint.jpg');
+  margin: 0;
+  padding: 0;
+  font-family: Roboto;
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
-  font-family: 'Poppins'  , sans-serif;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  height: 80vh;
-  align-items: center;
-  background-color: #b5aeae;
+  background: linear-gradient(120deg, #007bff, #d0314c);
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* For screens smaller than 768px */
@@ -502,13 +499,14 @@ html, body {
   padding: 0;
   height: 100%;
 }
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.1);
-  position: fixed; /* Change from 'relative' to 'fixed' */
+  position: relative; /* Change from 'relative' to 'fixed' */
   top: 0;
   width: 100%; /* Ensure header spans the entire width of the viewport */
   z-index: 1;
@@ -538,4 +536,39 @@ nav ul li a {
 
 nav ul li a:hover {
   color: #007BFF;
+}
+
+.logo img {
+  cursor: pointer;
+  width: 30px;  /* adjust as needed */
+  position: absolute;
+  right: 50px;  /* adjust as needed */
+}
+
+.menu {
+  display: none;
+  position: absolute;
+  top: 70px;
+  right: 50px;
+  background-color: rgba(255, 255, 255, 0.8); /* Adjusted transparency */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  transition: all 0.3s ease;
+}
+
+.menu button {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.menu button:hover {
+  background-color: #45a049;
 }
