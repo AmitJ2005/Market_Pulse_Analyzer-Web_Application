@@ -17,61 +17,78 @@ def year_income_statement(stock_symbol):
     try:
         stock = yf.Ticker(stock_symbol)
         # Get stock info
-        income_statement = stock.income_stmt
-        income_statement = income_statement.loc[["Total Revenue", "Operating Revenue", "Gross Profit", "Operating Income", "EBITDA", "EBIT", "Net Income", "Diluted EPS", "Basic EPS", "Interest Expense", "Net Interest Income", "Tax Provision", "Tax Rate For Calcs", "Diluted NI Availto Com Stockholders", "Net Income Common Stockholders", "Basic Average Shares", "Diluted Average Shares", "Total Other Finance Cost", "Special Income Charges", "Other Special Charges"]]
-        quarterly_statement=stock.quarterly_income_stmt
+        try:
+            income_statement = stock.income_stmt
+            print('income_statement')
+            print(income_statement)
+            print()
+        except Exception as e:
+            print(f"Error fetching income statement for {stock_symbol}: {e}")
 
-        balance_sheet=stock.balance_sheet
-        quarterly_balance=stock.quarterly_balance_sheet
+        try:
+            quarterly_statement=stock.quarterly_income_stmt
+            print(quarterly_statement)
+            print()
+        except Exception as e:
+            print(f"Error fetching quarterly statement for {stock_symbol}: {e}")
 
-        cashflow=stock.cashflow
+        try:
+            balance_sheet=stock.balance_sheet
+            print("balance_sheet")
+            print(balance_sheet)
+            print()
+        except Exception as e:
+            print(f"Error fetching balance sheet for {stock_symbol}: {e}")
 
-        major_holders=stock.major_holders
+        try:
+            quarterly_balance=stock.quarterly_balance_sheet
+            print(quarterly_balance)
+            print()
+        except Exception as e:
+            print(f"Error fetching quarterly balance for {stock_symbol}: {e}")
 
-        mutualfund_holders=stock.mutualfund_holders
+        try:
+            cashflow=stock.cashflow
+            print("cashflow")
+            print(cashflow)
+            print()
+        except Exception as e:
+            print(f"Error fetching cashflow for {stock_symbol}: {e}")
 
-        insider_transactions=stock.insider_transactions
+        try:
+            major_holders=stock.major_holders
+            print("major_holders")
+            print(major_holders)
+            print()
+        except Exception as e:
+            print(f"Error fetching major holders for {stock_symbol}: {e}")
 
-        insider_roster_holders=stock.insider_roster_holders
+        try:
+            mutualfund_holders=stock.mutualfund_holders
+            print("mutualfund_holders")
+            print(mutualfund_holders)
+            print()
+        except Exception as e:
+            print(f"Error fetching mutual fund holders for {stock_symbol}: {e}")
 
+        try:
+            insider_transactions=stock.insider_transactions
+            print("insider_transactions")
+            print(insider_transactions)
+            print()
+        except Exception as e:
+            print(f"Error fetching insider transactions for {stock_symbol}: {e}")
 
-        # print(income_statement)
-        # 
-        
-        print('income_statement')
-        print(income_statement)
-        print() 
-        print(quarterly_statement)
-        print()
-
-        print("balance_sheet")
-        print(balance_sheet)
-        print()
-        print(quarterly_balance)
-        print()
-
-        print("cashflow")
-        print(cashflow)
-        print()
-
-        print("major_holders")
-        print(major_holders)
-        print()
-
-        print("mutualfund_holders")
-        print(mutualfund_holders)
-        print()
-
-        print("insider_transactions")
-        print(insider_transactions)
-        print()
-
-        print("insider_roster_holders")
-        print(insider_roster_holders)
-        print()
+        try:
+            insider_roster_holders=stock.insider_roster_holders
+            print("insider_roster_holders")
+            print(insider_roster_holders)
+            print()
+        except Exception as e:
+            print(f"Error fetching insider roster holders for {stock_symbol}: {e}")
 
     except Exception as e:
-        print(f"Error fetching income statement for {stock_symbol}: {e}")
+        print(f"Error fetching data for {stock_symbol}: {e}")
         return None
         
 def fetch_info(stock_symbol):

@@ -131,6 +131,21 @@ function redirectToVisualizeData() {
 window.onload = loadStocks;
 
 
+// Function to handle document click event
+function handleDocumentClick(event) {
+  var searchInput = document.getElementById('searchInput');
+  var suggestionList = document.getElementById('suggestionList');
+
+  // Check if the click was outside the search input and suggestion list
+  if (!searchInput.contains(event.target) && !suggestionList.contains(event.target)) {
+  suggestionList.classList.remove('show'); // Hide suggestion list
+  searchInput.style.width = '250px'; // Collapse input field width
+}
+}
+
+// Attach event listener for document click
+document.addEventListener('click', handleDocumentClick);
+
 function toggleMenu() {
   var menu = document.getElementById("menu");
   if (menu.style.display === "block") {

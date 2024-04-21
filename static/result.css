@@ -108,22 +108,6 @@ header {
   box-shadow: 0 1px 4px rgba(146,161,176,.3);
 }
 
-header .logo{
-  margin-left:2cm;
-  text-align: transparent;
-  font-size: 1.9rem;
-  font-weight: 800;
-  text-decoration: none;
-  color: #0E2431;
-}
-
-header .logo i {
-  font-size: 2.2rem;
-}
-
-header .logo:hover {
-  color: #fc8c05;
-}
 
 header .navbar ul{
   margin-right:2cm;
@@ -1009,4 +993,11 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
   .theme__toggle:focus-visible {
       box-shadow: 0 0 0 0.125em var(--primary);
   }
+  }
+
+  #companyLogo {
+    height: 200px;
+    width: auto;
+    margin-bottom: 5px;
+    margin-left: 30px; /* Add this line */
   }

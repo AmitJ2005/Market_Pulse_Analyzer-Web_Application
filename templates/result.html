@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='result.css') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="../static/image/logo_for_tab.png">
 </head>
 <body>
     <div class="loader" id="loader">
@@ -64,7 +65,9 @@
     </script>
     <header>
         <!-- Logo -->
-        <a href="/" class="logo"><i class="fab fa-node-js"></i>Invest_igation Hub</a>
+        <a href="/">
+            <img src="../static/image/com_name.png" id="companyLogo" alt="Company Logo">
+          </a>
         <!-- Search container -->
         <div id="searchContainer">
             <input type="text" id="searchInput" >
