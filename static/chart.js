@@ -229,6 +229,20 @@ document.getElementById('timeRangeSelector').addEventListener('click', function(
                 });
                 break;
 
+            // Add a case for 10 year
+            case '10years':
+                console.log('Filtering data for the last 10 years...');
+                // Filter data for the last 10 years
+                var today10Years = new Date();
+                var last10Years = new Date(today10Years.getFullYear() - 10, today10Years.getMonth(), today10Years.getDate());
+                var filteredData = filterDataForDateRange(last10Years, today10Years);
+                newData = filteredData.newData;
+                newLabels = filteredData.newLabels.map(label => {
+                    var date = new Date(label);
+                    return date.getFullYear().toString(); // Format the label as MMM YYYY
+                });
+                break;
+
             case 'all':
                 console.log('Displaying all data...');
                 // Use the original data

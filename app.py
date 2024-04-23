@@ -12,86 +12,30 @@ result_df_same_month = None
 result_df_yearly = None
 result_info = None
 year_income = None
+stock_ticker = None
+stock_information = None
 
-def year_income_statement(stock_symbol):
+def stock_info():
+    global stock_ticker
     try:
-        stock = yf.Ticker(stock_symbol)
-        # Get stock info
-        try:
-            income_statement = stock.income_stmt
-            print('income_statement')
-            print(income_statement)
-            print()
-        except Exception as e:
-            print(f"Error fetching income statement for {stock_symbol}: {e}")
-
-        try:
-            quarterly_statement=stock.quarterly_income_stmt
-            print(quarterly_statement)
-            print()
-        except Exception as e:
-            print(f"Error fetching quarterly statement for {stock_symbol}: {e}")
-
-        try:
-            balance_sheet=stock.balance_sheet
-            print("balance_sheet")
-            print(balance_sheet)
-            print()
-        except Exception as e:
-            print(f"Error fetching balance sheet for {stock_symbol}: {e}")
-
-        try:
-            quarterly_balance=stock.quarterly_balance_sheet
-            print(quarterly_balance)
-            print()
-        except Exception as e:
-            print(f"Error fetching quarterly balance for {stock_symbol}: {e}")
-
-        try:
-            cashflow=stock.cashflow
-            print("cashflow")
-            print(cashflow)
-            print()
-        except Exception as e:
-            print(f"Error fetching cashflow for {stock_symbol}: {e}")
-
-        try:
-            major_holders=stock.major_holders
-            print("major_holders")
-            print(major_holders)
-            print()
-        except Exception as e:
-            print(f"Error fetching major holders for {stock_symbol}: {e}")
-
-        try:
-            mutualfund_holders=stock.mutualfund_holders
-            print("mutualfund_holders")
-            print(mutualfund_holders)
-            print()
-        except Exception as e:
-            print(f"Error fetching mutual fund holders for {stock_symbol}: {e}")
-
-        try:
-            insider_transactions=stock.insider_transactions
-            print("insider_transactions")
-            print(insider_transactions)
-            print()
-        except Exception as e:
-            print(f"Error fetching insider transactions for {stock_symbol}: {e}")
-
-        try:
-            insider_roster_holders=stock.insider_roster_holders
-            print("insider_roster_holders")
-            print(insider_roster_holders)
-            print()
-        except Exception as e:
-            print(f"Error fetching insider roster holders for {stock_symbol}: {e}")
-
+        stock_ticker = yf.Ticker(stock_symbol)
+        data = {
+            'income_statement': stock_ticker.income_stmt.to_html(),
+            'quarterly_statement': stock_ticker.quarterly_income_stmt.to_html(),
+            'balance_sheet': stock_ticker.balance_sheet.to_html(),
+            'quarterly_balance': stock_ticker.quarterly_balance_sheet.to_html(),
+            'cashflow': stock_ticker.cashflow.to_html(),
+            'major_holders': stock_ticker.major_holders.to_html(),
+            'mutualfund_holders': stock_ticker.mutualfund_holders.to_html(),
+            'insider_transactions': stock_ticker.insider_transactions.to_html(),
+            'insider_roster_holders': stock_ticker.insider_roster_holders.to_html()
+        }
+        return data
     except Exception as e:
-        print(f"Error fetching data for {stock_symbol}: {e}")
-        return None
+        return f"Error fetching stock info for {stock_symbol}: {e}"
         
 def fetch_info(stock_symbol):
+    global stock_ticker
     try:
         # Create a Ticker object for the stock
         stock_ticker = yf.Ticker(stock_symbol)
@@ -158,13 +102,14 @@ def handle_selected_stock(selected_stock):
     global stock_symbol
     global result_info
     global year_income
+    global stock_information
     # Fetch stock symbol based on the selected stock
     try:
         result = search(selected_stock)
         if result['quotes']:
             stock_symbol = result['quotes'][0]['symbol']
             print(f"Stock symbol for {selected_stock}: {stock_symbol}")
-            year_income = year_income_statement(stock_symbol)
+            stock_information = stock_info()
             # Fetch company information
             result_info = fetch_info(stock_symbol)
             # Fetch historical data
@@ -221,6 +166,7 @@ def submit_selected_stock():
 def visualize_data():
     global df
     global result_info
+    global stock_information
 
     # First visualization
     if df is None or df.empty:
@@ -289,7 +235,7 @@ def visualize_data():
 
     return render_template('result.html', labels=json.dumps(labels), data=json.dumps(data),
                            data_monthly=result_df.to_dict('records'), data_yearly=result_df_yearly.to_dict('records')
-                            , result_info=result_info)
+                            , result_info=result_info, stock_information=stock_information)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1001,3 +1001,14 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
     margin-bottom: 5px;
     margin-left: 30px; /* Add this line */
   }
+
+  .center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .content {
+    text-align: center;
+  }

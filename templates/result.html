@@ -26,12 +26,11 @@
     </div>
     <div id="sidebar">
         <ul>
-            <li><a href="#details">Details</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#first-visualization">line Chart</a></li>
-            <li><a href="#second-visualization">Same Month</a></li>
+            <li><a href="#first-visualization">Chart</a></li>
             <li><a href="#third-visualization">Year Return</a></li>
             <li><a href="#fourth-visualization">Month Return</a></li>
+            <li><a href="#second-visualization">Same Month</a></li>
+            <li><a href="#about">About</a></li>
         </ul>
     </div>
     <script>
@@ -43,18 +42,18 @@
                 sidebar.style.width = '0'; // Hide the sidebar
             }
         });
-    $(document).ready(function(){
-        $('a[href^="#"]').on('click', function(e) {
-            e.preventDefault();
+        $(document).ready(function(){
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
 
-            var target = this.hash;
-            var $target = $(target);
+                var target = this.hash;
+                var $target = $(target);
 
-            $('html, body').animate({
-                'scrollTop': $target.offset().top - 50 // Subtract 50 pixels
-            }, 1000, 'swing');
+                $('html, body').animate({
+                    'scrollTop': $target.offset().top - 50 // Subtract 50 pixels
+                }, 1000, 'swing');
+            });
         });
-    });
     </script>
     <script>
         var dailyLabels = {{ labels | safe }};
@@ -249,16 +248,35 @@
         <div id="timeRangeSelector" class="btn-group">
             <button type="button" class="btn btn-primary" data-value="week">1 Week</button>
             <button type="button" class="btn btn-primary" data-value="month">1 Month</button>
-            <button type="button" class="btn btn-primary" data-value="6months">6 Months</button>
+            <button type="button" class="btn btn-primary" data-value="6months">6 Month</button>
             <button type="button" class="btn btn-primary" data-value="year">1 Year</button>
-            <button type="button" class="btn btn-primary" data-value="3years">3 Years</button>
-            <button type="button" class="btn btn-primary" data-value="5years">5 Years</button>
+            <button type="button" class="btn btn-primary" data-value="3years">3 Year</button>
+            <button type="button" class="btn btn-primary" data-value="5years">5 Year</button>
+            <button type="button" class="btn btn-primary" data-value="10years">10 Year</button>
             <button type="button" class="btn btn-primary" data-value="all">All</button>
         </div>
 
         <!-- Canvas for displaying the line chart -->
         <canvas id="dailyChart" width="400" height="100"></canvas>
     </div>
+
+    <!-- Third Visualization: Bar Chart for Yearly Data -->
+    <div id="third-visualization"  class="container visualization-container">
+        <h2>Yearly Return</h2>
+        <canvas id="yearlyChart" width="400" height="100"></canvas>
+    </div>
+  
+    <!-- Four Visualization: Pie Chart for Yearly Data -->
+    <div id="fourth-visualization"  class="container visualization-container">
+        <div class="flex-container">
+            <h2>Monthly Return</h2>
+            <select id="yearSelect">
+                <!-- Options will be populated dynamically in JavaScript -->
+            </select>
+        </div>
+        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
+    </div>
+
      <!-- Second Visualization: Bar Chart for Monthly Data -->
     <div id="second-visualization" class="container visualization-container">
         <div class="flex-container">
@@ -281,28 +299,22 @@
         <canvas id="monthlyChart" width="400" height="100"></canvas>
     </div>
 
-   
-
-    <!-- Third Visualization: Bar Chart for Yearly Data -->
-    <div id="third-visualization"  class="container visualization-container">
-        <h2>Yearly Return</h2>
-        <canvas id="yearlyChart" width="400" height="100"></canvas>
-    </div>
-  
-    <!-- Four Visualization: Pie Chart for Yearly Data -->
-    <div id="fourth-visualization"  class="container visualization-container">
-        <div class="flex-container">
-            <h2>Monthly Return</h2>
-            <select id="yearSelect">
-                <!-- Options will be populated dynamically in JavaScript -->
-            </select>
-        </div>
-        <canvas id="monthlyYearChart" width="400" height="100"></canvas>
-    </div>
-
-    <div class="About">
+ 
+    <div id="about" class="About">
         <strong>About:</strong> {{ result_info["longBusinessSummary"] }}
     </div>
+
+    <div class="center-container">
+        {% for key, value in stock_information.items() %}
+            <div class="container visualization-container">
+                <h2 class="content">{{ key }}</h2>
+                <div class="content">
+                    {{ value | safe }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 
     <script src="../static/chart.js"></script>
     <script src="../static/script.js"></script> 
