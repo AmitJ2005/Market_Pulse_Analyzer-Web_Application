@@ -10,10 +10,13 @@ stock_ticker = None
 result_info = None
 stock_information = None
 
+def initialize_ticker(stock_symbol):
+    global stock_ticker
+    stock_ticker = yf.Ticker(stock_symbol)
+
 def stock_info():
     global stock_ticker
     try:
-        stock_ticker = yf.Ticker(stock_symbol)
         data = {
             'Income_Statement': stock_ticker.income_stmt.to_html(),
             'Quarterly_Statement': stock_ticker.quarterly_income_stmt.to_html(),
@@ -25,10 +28,9 @@ def stock_info():
     except Exception as e:
         return f"Error fetching stock info for {stock_symbol}: {e}"
         
-def fetch_info(stock_symbol):
+def fetch_info():
     global stock_ticker
     try:
-        stock_ticker = yf.Ticker(stock_symbol)
         company_info = stock_ticker.info
         general_info = {
             "Company Name": company_info.get("longName", ""),
@@ -44,9 +46,9 @@ def fetch_info(stock_symbol):
             "totalCash": company_info.get("totalCash", ""),
             "freeCashflow": company_info.get("freeCashflow", ""),
             "longBusinessSummary": company_info.get("longBusinessSummary", ""),
-            "share in Market": company_info.get("floatShares",""),
-            "Total Share in Company": company_info.get("sharesOutstanding",""),
-            "enterpriseValue": company_info.get("enterpriseValue",""),
+            "share in Market": company_info.get("floatShares", ""),
+            "Total Share in Company": company_info.get("sharesOutstanding", ""),
+            "enterpriseValue": company_info.get("enterpriseValue", ""),
         }
         company_officers = []
         for officer in company_info.get("companyOfficers", []):
@@ -63,10 +65,10 @@ def fetch_info(stock_symbol):
         print(f"Error fetching stock information for {stock_symbol}: {e}")
         return None
 
-def fetch_historical_data(stock_symbol):
+def fetch_historical_data():
+    global stock_ticker
     try:
-        ticker = yf.Ticker(stock_symbol)
-        data = ticker.history(period='max')
+        data = stock_ticker.history(period='max')
         return data
     except Exception as e:
         print(f"Error fetching historical data for {stock_symbol}: {e}")
@@ -93,9 +95,10 @@ def handle_selected_stock(selected_stock):
             print(f"No symbol found for stock: {selected_stock}")
             return None, None
 
+        initialize_ticker(stock_symbol)
         stock_information = stock_info()
-        result_info = fetch_info(stock_symbol)
-        df = fetch_historical_data(stock_symbol)
+        result_info = fetch_info()
+        df = fetch_historical_data()
         if df is not None:
             df = preprocess_data(df)
         else:
@@ -154,14 +157,11 @@ def visualize_data():
     labels = df.index.strftime('%Y-%m-%d').tolist()
 
     try:
-        # Attempt to access the 'Close' column
         data = df['Close'].tolist()
     except KeyError:
-        # Handle the error if the 'Close' column is not found
         error_message = "Error: 'Close' column not found in DataFrame."
         print(error_message)
         return jsonify({'error': error_message}), 400
-
 
     # Second visualization
     result_data = []
