@@ -2,7 +2,7 @@
 body {
   margin: 0;
   overflow-x: hidden; /* Remove horizontal scrollbar */
-  background: whitesmoke; /* Add background color */
+  background: rgb(207, 29, 82); /* Add background color */
 }
 
 /* Styles for the search bar */
@@ -996,7 +996,7 @@ flex: 0 0 calc(33.33% - 20px); /* Adjust the width as per your requirement */
   }
 
   #companyLogo {
-    height: 200px;
+    height: 75px;
     width: auto;
     margin-bottom: 5px;
     margin-left: 30px; /* Add this line */

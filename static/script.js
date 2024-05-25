@@ -39,15 +39,17 @@ function handleInputFieldBlur() {
 // Attach event listener for input field blur
 document.getElementById('searchInput').addEventListener('blur', handleInputFieldBlur);
 var stocks = [];
+
 // Function to load stock names from server
 function loadStocks() {
   fetch('/stock_names.json')
     .then(response => response.json())
     .then(data => {
-      stocks = data; // Store the loaded stock names in the array
+      stocks = Object.keys(data); // Store the loaded stock names in the array
     })
     .catch(error => console.error('Error loading stocks:', error));
 }
+
 // Function to submit selected stock to server
 function submitSelectedStock(selectedStock) {
   var loader = document.getElementById('loader');

@@ -20,15 +20,11 @@ def stock_info():
     try:
         stock_ticker = yf.Ticker(stock_symbol)
         data = {
-            'income_statement': stock_ticker.income_stmt.to_html(),
-            'quarterly_statement': stock_ticker.quarterly_income_stmt.to_html(),
-            'balance_sheet': stock_ticker.balance_sheet.to_html(),
-            'quarterly_balance': stock_ticker.quarterly_balance_sheet.to_html(),
-            'cashflow': stock_ticker.cashflow.to_html(),
-            'major_holders': stock_ticker.major_holders.to_html(),
-            'mutualfund_holders': stock_ticker.mutualfund_holders.to_html(),
-            'insider_transactions': stock_ticker.insider_transactions.to_html(),
-            'insider_roster_holders': stock_ticker.insider_roster_holders.to_html()
+            'Income_Statement': stock_ticker.income_stmt.to_html(),
+            'Quarterly_Statement': stock_ticker.quarterly_income_stmt.to_html(),
+            'Balance_Sheet': stock_ticker.balance_sheet.to_html(),
+            'Quarterly_Balance': stock_ticker.quarterly_balance_sheet.to_html(),
+            'Cashflow': stock_ticker.cashflow.to_html(),
         }
         return data
     except Exception as e:
@@ -103,25 +99,32 @@ def handle_selected_stock(selected_stock):
     global result_info
     global year_income
     global stock_information
+
     # Fetch stock symbol based on the selected stock
     try:
-        result = search(selected_stock)
-        if result['quotes']:
-            stock_symbol = result['quotes'][0]['symbol']
-            print(f"Stock symbol for {selected_stock}: {stock_symbol}")
-            stock_information = stock_info()
-            # Fetch company information
-            result_info = fetch_info(stock_symbol)
-            # Fetch historical data
-            df = fetch_historical_data(stock_symbol)
-            if df is not None:
-                # Preprocess the data
-                df = preprocess_data(df)
-            else:
-                print("Failed to fetch or preprocess data.")
-            return result_info
+        with open('stock_names.json', 'r') as f:
+            stock_symbols = json.load(f)
+
+        # Get the stock symbol for the selected stock
+        stock_symbol = stock_symbols.get(selected_stock)
+        print(stock_symbol)
+
+        if stock_symbol is None:
+            print(f"No symbol found for stock: {selected_stock}")
+            return
+
+        print(f"Stock symbol for {selected_stock}: {stock_symbol}")
+        stock_information = stock_info()
+        # Fetch company information
+        result_info = fetch_info(stock_symbol)
+        # Fetch historical data
+        df = fetch_historical_data(stock_symbol)
+        if df is not None:
+            # Preprocess the data
+            df = preprocess_data(df)
         else:
-            print(f"No stock symbol found for {selected_stock}")
+            print("Failed to fetch or preprocess data.")
+        return result_info
     except Exception as e:
         print(f"Error fetching stock symbol for {selected_stock}: {e}")
 
